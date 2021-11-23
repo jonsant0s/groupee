@@ -1,9 +1,13 @@
 import React from 'react';
 import './App.css';
 
+import NavBar from './components/NavBar/NavBar';
+
 function App() {
   return (
-    <div className="App">
+
+    <div>
+      <NavBar/>
       <header className="App-header">
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
