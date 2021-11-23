@@ -1,9 +1,9 @@
 import React from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
-import "./SignUpForm.css";
+import "./LoginForm.css";
 
-export default function SignUpForm() {
+export default function LoginForm() {
   return (
     <div className="containerDiv">
       <div className="titleDiv">
