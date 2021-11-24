@@ -27,6 +27,9 @@ export default function LoginForm() {
           <Button className="submitButton" variant="primary" type="submit">
             Login
           </Button>
+          <p className="accountParagraph">Don't have an account?</p>
+          {/* Route "sign up here" to the SignUpForm Component later */}
+          <p>Sign up here</p>
         </Form>
       </div>
     </div>
