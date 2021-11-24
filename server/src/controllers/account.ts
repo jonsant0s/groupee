@@ -29,7 +29,11 @@ export async function signup(req: Request, res: Response) {
 
     db.query(`
         INSERT INTO groupee.account (username, password, first_name, middle_name, last_name)
-        VALUES ("${form.username}", "${form.password}", "${form.first_name}", "${form.middle_name}", "${form.last_name}")`)
+        VALUES ("${form.username}", 
+                "${form.password}", 
+                "${form.first_name}", 
+                "${form.middle_name}", 
+                "${form.last_name}")`)
             .then(() => {
                 return res.send(`Account created!`);
             }).catch(() => {

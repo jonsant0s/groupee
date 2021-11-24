@@ -1,8 +1,9 @@
 import express, { Application } from "express";
 import morgan from "morgan";
 
-import IndexRoutes from "./routes"
-import AccountRequest from "./routes/account"
+import IndexRoutes from "./routes";
+import AccountRequest from "./routes/account";
+import GroupRequests from "./routes/groupRequests";
 
 export class App {
     private app: Application;
@@ -26,6 +27,7 @@ export class App {
     routes() {
         this.app.use(IndexRoutes);
         this.app.use("/authentication", AccountRequest);
+        this.app.use("/requests", GroupRequests);
     }
 
     async listen() {
