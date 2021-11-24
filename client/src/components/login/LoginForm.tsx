@@ -2,6 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import "./LoginForm.css";
+import { NavLink } from 'react-router-dom';
 
 export default function LoginForm() {
   return (
@@ -29,7 +30,9 @@ export default function LoginForm() {
           </Button>
           <p className="accountParagraph">Don't have an account?</p>
           {/* Route "sign up here" to the SignUpForm Component later */}
-          <p>Sign up here</p>
+          <NavLink className="nav-link" to="/signup">
+            Sign Up Here
+          </NavLink>
         </Form>
       </div>
     </div>
