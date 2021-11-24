@@ -12,17 +12,17 @@ export default function LoginForm() {
       </div>
       <div>
         <Form className="form">
-          <Form.Group className="emailGroup" controlId="formBasicEmail">
+          <Form.Group className="usernameGroup" controlId="formBasicUsername">
             <div>
-              <Form.Label className="emailLabel">Email address</Form.Label>
+              <Form.Label className="usernameLabe">Username</Form.Label>
             </div>
-            <Form.Control type="email" placeholder="Enter email" />
+            <Form.Control type="username" />
           </Form.Group>
           <Form.Group className="passwordGroup" controlId="formBasicPassword">
             <div>
               <Form.Label>Password</Form.Label>
             </div>
-            <Form.Control type="password" placeholder="Password" />
+            <Form.Control type="password" />
           </Form.Group>
           <Button className="submitButton" variant="primary" type="submit">
             Login
