@@ -1,26 +1,19 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
+import LoginForm from "./components/login/LoginForm";
+import NavBar from "./components/navigation/NavBar";
+import SignUpForm from "./components/signup/SignUpForm";
 
-import NavBar from './components/navigation/NavBar';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 function App() {
   return (
-
-    <div>
+    <div className="App">
       <NavBar/>
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Routes>
+        <Route path = '/login' element = {<LoginForm />} />
+        <Route path = '/signup' element={<SignUpForm/>} />
+      </Routes>
     </div>
   );
 }
