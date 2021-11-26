@@ -2,7 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/esm/Button";
 import "./HomeScreen.css";
 
-export default function HomeScreen() {
+export const HomeScreen = () => {
   return (
     <div className="outerDiv">
       <div className="d-grid gap-3">
