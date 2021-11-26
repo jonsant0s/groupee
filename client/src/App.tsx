@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import HomeScreen from "./components/home/HomeScreen";
+import {HomeScreen, RequestForm, RequestList } from "./components/home";
 import LoginForm from "./components/login/LoginForm";
 import NavBar from "./components/navigation/NavBar";
 import SignUpForm from "./components/signup/SignUpForm";
@@ -11,7 +11,9 @@ function App() {
     <div className="App">
       <NavBar />
       {/* <LoginForm /> */}
-      <HomeScreen />
+      {/* <HomeScreen /> */}
+      <RequestForm/>
+      {/* <RequestList /> */}
       <Routes>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignUpForm />} />
