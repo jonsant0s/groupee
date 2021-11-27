@@ -10,14 +10,12 @@ function App() {
   return (
     <div className="App">
       <NavBar />
-      {/* <LoginForm /> */}
-      {/* <HomeScreen /> */}
-      <RequestForm/>
       {/* <RequestList /> */}
       <Routes>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignUpForm />} />
-        <Route path="/home" element={<HomeScreen />} />
+        <Route path="/" element={<HomeScreen />} />
+        <Route path="/requestform" element={<RequestForm/>}/>
       </Routes>
     </div>
   );

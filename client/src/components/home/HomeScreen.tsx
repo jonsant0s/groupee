@@ -6,15 +6,15 @@ export const HomeScreen = () => {
   return (
     <div className="outerDiv">
       <div className="d-grid gap-3">
-        <Button variant="primary" size="lg">
+        <Button href="/requestform" variant="primary" size="lg">
           Create Group Request
         </Button>
         <Button variant="secondary" size="lg">
           Update Group Request
         </Button>
-        <Button variant="secondary" size="lg">
-          View Group
-        </Button>
+          <Button variant="secondary" size="lg">
+            View Group
+          </Button>
       </div>
     </div>
   );
