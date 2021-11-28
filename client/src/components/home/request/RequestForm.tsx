@@ -9,7 +9,7 @@ import data from "./mock-data.json";
 
 
 const days: string[] = ["Select Day", "Monday" , "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-// export const RequestForm: React.FC<Props> = ({})
+
 export const RequestForm = () => {
 
     const [members, setMembers] = useState(data);
@@ -22,6 +22,7 @@ export const RequestForm = () => {
         student_id: 0,
         group_size: 0,
         availability: "",
+        memberList: {},
     });
 
     const handleAddMemberChange = (e) => {
@@ -36,8 +37,8 @@ export const RequestForm = () => {
         setAddMemberData(newMemberData);
        
     }
-    const handleAddFormSubmit = (event) => {
-        event.preventDefault();
+    const handleAddFormSubmit = (e) => {
+        e.preventDefault();
     
         const newMember = {
           id: addMemberData.member_id,
@@ -45,6 +46,10 @@ export const RequestForm = () => {
     
         const newMembers = [...members, newMember];
         setMembers(newMembers);
+        setValues((values) => ({
+            ...values,
+            memberList: newMembers,
+        }));
         console.log(newMembers);
     };
 
@@ -56,6 +61,7 @@ export const RequestForm = () => {
         newMembers.splice(index, 1);
     
         setMembers(newMembers);
+        console.log(newMembers);
     };
     
 
