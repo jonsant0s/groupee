@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
+
+import axios from 'axios';
+
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import "./LoginForm.css";
 
 export default function LoginForm() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [loginStatus, setLoginStatus] = useState("");
+
   return (
     <div className="containerDiv">
       <div className="titleDiv">

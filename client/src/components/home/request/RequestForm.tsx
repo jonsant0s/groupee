@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import Button from "react-bootstrap/esm/Button";
 
 import axios from 'axios';
