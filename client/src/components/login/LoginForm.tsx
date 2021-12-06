@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import { Formik, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+import { login } from "../../services/AuthService";
+import { RouteComponentProps } from "react-router";
 
 import axios from 'axios';
 
@@ -6,11 +11,52 @@ import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import "./LoginForm.css";
 
-export default function LoginForm() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+interface RouterProps {
+  history: string;
+}
 
-  const [loginStatus, setLoginStatus] = useState("");
+type Props = RouteComponentProps<RouterProps>;
+
+export const LoginForm: React.FC<Props> = ({ history }) => {
+  const[loading, setLoading] = useState<boolean>(false);
+  const[message, setMessage] = useState<string>("");
+
+  const initialValues: {
+    email: string;
+    password: string;
+  } = {
+    email: "",
+    password: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().required("This field is required!"),
+    password: Yup.string().required("This field is required!"),
+  });
+
+  const handleLogin = (formValue: { email: string; password: string }) => {
+    const { email, password } = formValue;
+
+    setMessage(" ");
+    setLoading(true);
+
+    login(email, password).then(()=> {
+      history.push("/profile");
+      window.location.reload();
+    },
+    (error) => {
+      const resMessage =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+        setLoading(false);
+        setMessage(resMessage);
+      }
+    );
+  };
 
   return (
     <div className="containerDiv">
