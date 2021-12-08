@@ -1,48 +1,76 @@
 import React, { useState } from "react";
+import { useNavigate, NavLink } from "react-router-dom";
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import { login } from "../../services/AuthService";
-import { RouteComponentProps } from "react-router";
 
 import axios from 'axios';
 
+import InputGroup from "react-bootstrap/esm/InputGroup";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import "./LoginForm.css";
 
-interface RouterProps {
-  history: string;
-}
+const required = (value) => {
+  if (!value) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        This field is required!
+      </div>
+    );
+  }
+};
 
-type Props = RouteComponentProps<RouterProps>;
+const LoginForm: React.FC = () => {
+  const navigate = useNavigate();
 
-export const LoginForm: React.FC<Props> = ({ history }) => {
+  const[validated, setValidated] = useState(false)
+  const[loginValues, setLogin] = useState({
+    email: "",
+    password: ""
+  });
   const[loading, setLoading] = useState<boolean>(false);
   const[message, setMessage] = useState<string>("");
-
-  const initialValues: {
-    email: string;
-    password: string;
-  } = {
-    email: "",
-    password: "",
+  
+  let handleEmail = (e) => {
+    e.persist();
+    setLogin((loginValues) => ({
+        ...loginValues,
+        email: e.target.value,
+    }));
   };
+  let handlePassword = (e) => {
+    e.persist();
+    setLogin((loginValues) => ({
+        ...loginValues,
+        password: e.target.value,
+    }));
+  };
+
+  
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().required("This field is required!"),
     password: Yup.string().required("This field is required!"),
   });
 
-  const handleLogin = (formValue: { email: string; password: string }) => {
-    const { email, password } = formValue;
+  const handleLogin = (e) => {
+
+    const form = e.currentTarget;
+    if(form.checkValidity() === false) {
+      e.preventDefault();
+    
+    
 
     setMessage(" ");
     setLoading(true);
 
-    login(email, password).then(()=> {
-      history.push("/profile");
+    login(loginValues.email, loginValues.password).then(()=> {
+      
+      navigate("/profile");
       window.location.reload();
+      
     },
     (error) => {
       const resMessage =
@@ -56,6 +84,9 @@ export const LoginForm: React.FC<Props> = ({ history }) => {
         setMessage(resMessage);
       }
     );
+    }
+
+    setValidated(true);
   };
 
   return (
@@ -64,28 +95,49 @@ export const LoginForm: React.FC<Props> = ({ history }) => {
         <h1>Groupee</h1>
         <h6>School Group Managment System</h6>
       </div>
-      <div>
-        <Form className="form">
-          <Form.Group className="usernameGroup" controlId="formBasicUsername">
-            <div>
-              <Form.Label className="usernameLabe">Username</Form.Label>
-            </div>
-            <Form.Control type="username" />
-          </Form.Group>
-          <Form.Group className="passwordGroup" controlId="formBasicPassword">
-            <div>
-              <Form.Label>Password</Form.Label>
-            </div>
-            <Form.Control type="password" />
-          </Form.Group>
-          <Button className="submitButton" variant="primary" type="submit">
-            Login
-          </Button>
-          <p className="accountParagraph">Don't have an account?</p>
-          {/* Route "sign up here" to the SignUpForm Component later */}
-          <p>Sign up here</p>
-        </Form>
+      <div> 
+          <Form noValidate validated={validated} onSubmit={handleLogin} className="form">
+            <Form.Group className="usernameGroup" controlId="formBasicUsername">
+              <div>
+                <Form.Label className="usernameLabe">Username</Form.Label>
+              </div>
+                <Form.Control 
+                  type="email" 
+                  value={loginValues.email} 
+                  onChange={handleEmail} 
+                  required/>
+                <Form.Control.Feedback type="invalid">
+                  Please provide an email.
+                </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="passwordGroup" controlId="formBasicPassword">
+              <div>
+                <Form.Label>Password</Form.Label>
+              </div>
+              <Form.Control type="password" value={loginValues.password} onChange={handlePassword} required/>
+              <Form.Control.Feedback type="invalid">
+                Please provide a password.
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Button className="submitButton" variant="primary" type="submit" onClick={handleLogin}>
+              Login
+            </Button>
+            <p className="accountParagraph">Don't have an account?</p>
+            <NavLink className="nav-link" to="/signup">
+              Sign Up Here
+            </NavLink>
+            {message && (
+              <div className="form-group">
+                <div className="alert alert-danger" role="alert">
+                  {message}
+                </div>
+              </div>
+            )}
+          </Form>
+      
       </div>
     </div>
   );
 }
+
+export default LoginForm;

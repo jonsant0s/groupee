@@ -1,15 +1,16 @@
 import axios from "axios";
 
-const API_URL = "https://jsonplaceholder.typicode.com/users";
+const API_URL = "https://localhost:3001/";
 
 //Uses axios for HTTP requests and local storage for user information & JWT
 
 export const login = (email: string, password: string) => {
-    return axios.post(API_URL + "signin", {
+    return axios.post(API_URL + "users", {
         email,
         password
     })
     .then(response => {
+        console.log(email, password)
         if(response.data.accessToken) {
             localStorage.setItem("user", JSON.stringify(response.data));
         }
