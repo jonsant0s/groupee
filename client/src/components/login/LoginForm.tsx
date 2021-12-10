@@ -5,7 +5,9 @@ import * as Yup from "yup";
 
 import { login } from "../../services/AuthService";
 
+
 import axios from 'axios';
+
 
 import InputGroup from "react-bootstrap/esm/InputGroup";
 import Button from "react-bootstrap/esm/Button";
@@ -27,7 +29,7 @@ const LoginForm: React.FC = () => {
 
   const[validated, setValidated] = useState(false)
   const[loginValues, setLogin] = useState({
-    email: "",
+    username: "",
     password: ""
   });
   const[loading, setLoading] = useState<boolean>(false);
@@ -37,7 +39,7 @@ const LoginForm: React.FC = () => {
     e.persist();
     setLogin((loginValues) => ({
         ...loginValues,
-        email: e.target.value,
+        username: e.target.value,
     }));
   };
   let handlePassword = (e) => {
@@ -51,40 +53,40 @@ const LoginForm: React.FC = () => {
   
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required("This field is required!"),
+    username: Yup.string().required("This field is required!"),
     password: Yup.string().required("This field is required!"),
   });
 
   const handleLogin = (e) => {
 
     const form = e.currentTarget;
-    if(form.checkValidity() === false) {
+    if(form.checkValidity() === true) {
       e.preventDefault();
     
-    
 
-    setMessage(" ");
-    setLoading(true);
-
-    login(loginValues.email, loginValues.password).then(()=> {
+      setMessage(" ");
+      setLoading(true);
+      console.log(loginValues);
       
-      navigate("/profile");
-      window.location.reload();
-      
-    },
-    (error) => {
-      const resMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+      login(loginValues.username, loginValues.password).then(()=> {
+        
+        navigate("/profile");
+        
+      },
+        (error) => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
 
-        setLoading(false);
-        setMessage(resMessage);
-      }
-    );
+            setLoading(false);
+            setMessage(resMessage);
+          }
+        );
     }
+    
 
     setValidated(true);
   };
@@ -102,8 +104,8 @@ const LoginForm: React.FC = () => {
                 <Form.Label className="usernameLabe">Username</Form.Label>
               </div>
                 <Form.Control 
-                  type="email" 
-                  value={loginValues.email} 
+                  type="text" 
+                  value={loginValues.username} 
                   onChange={handleEmail} 
                   required/>
                 <Form.Control.Feedback type="invalid">

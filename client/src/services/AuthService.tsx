@@ -1,22 +1,25 @@
 import axios from "axios";
 
-const API_URL = "https://localhost:3001/";
+const API_URL = "http://localhost:3001/";
 
 //Uses axios for HTTP requests and local storage for user information & JWT
 
-export const login = (email: string, password: string) => {
-    return axios.post(API_URL + "users", {
-        email,
-        password
-    })
-    .then(response => {
-        console.log(email, password)
+
+export const login = (username: string, password: string) => {
+    return axios.post(API_URL + "authentication/login", {
+        "username": username,
+        "password": password
+    }).then(response => {
+        console.log(response.data)
+        console.log(username, password)
+        /*
         if(response.data.accessToken) {
             localStorage.setItem("user", JSON.stringify(response.data));
         }
-
+        */
         return response.data;
     });
+    
 };
 
 export const logout = () => {

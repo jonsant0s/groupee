@@ -14,12 +14,12 @@ export async function login(req: Request, res: Response) {
     
     if(data) {
         if ( data.password != password ) {
-            return res.send(`Incorrect password.`);
+            return res.json(`Incorrect password.`);
         } else {
-            return res.send(`Welcome back "${username}"!`);
+            return res.json(`Welcome back "${username}"!`);
         }
     } else {
-        return res.send(`Account with username "${username}" does not exist.`);
+        return res.json(`Account with username "${username}" does not exist.`);
     }
 }
 
