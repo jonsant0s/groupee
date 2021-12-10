@@ -1,28 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import { Formik, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
 
 import { login } from "../../services/AuthService";
 
 
-import axios from 'axios';
-
-
-import InputGroup from "react-bootstrap/esm/InputGroup";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import "./LoginForm.css";
 
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
-};
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
@@ -32,10 +17,10 @@ const LoginForm: React.FC = () => {
     username: "",
     password: ""
   });
-  const[loading, setLoading] = useState<boolean>(false);
-  const[message, setMessage] = useState<string>("");
+  const[loading, setLoading] = useState(false);
+  const[message, setMessage] = useState("");
   
-  let handleEmail = (e) => {
+  let handleUsername = (e) => {
     e.persist();
     setLogin((loginValues) => ({
         ...loginValues,
@@ -49,13 +34,6 @@ const LoginForm: React.FC = () => {
         password: e.target.value,
     }));
   };
-
-  
-
-  const validationSchema = Yup.object().shape({
-    username: Yup.string().required("This field is required!"),
-    password: Yup.string().required("This field is required!"),
-  });
 
   const handleLogin = (e) => {
 
@@ -86,7 +64,6 @@ const LoginForm: React.FC = () => {
           }
         );
     }
-    
 
     setValidated(true);
   };
@@ -106,7 +83,7 @@ const LoginForm: React.FC = () => {
                 <Form.Control 
                   type="text" 
                   value={loginValues.username} 
-                  onChange={handleEmail} 
+                  onChange={handleUsername} 
                   required/>
                 <Form.Control.Feedback type="invalid">
                   Please provide an email.

@@ -26,10 +26,16 @@ export const logout = () => {
     localStorage.removeItem("user");
 };
 
-export const register = (email: string, password: string) => {
-    return axios.post(API_URL + "signup", {
-        email,
-        password
+export const register = (first_name: string, last_name: string, username: string, password: string) => {
+    return axios.post(API_URL + "authentication/signup", {
+        "username": username,
+        "password": password,
+        "first_name": first_name,
+        "last_name": last_name
+    }).then(response => {
+        console.log(response.data)
+
+        return response.data;
     });
 };
 

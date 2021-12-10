@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `groupee`. `account` (
     `username` VARCHAR(15) UNIQUE NOT NULL,
-    `password` VARCHAR(15) NOT NULL,
+    `password` VARCHAR(225) NOT NULL,
     `first_name` VARCHAR(54) NOT NULL,
     `middle_name` VARCHAR(54),
     `last_name` VARCHAR(54) NOT NULL,
@@ -78,6 +78,22 @@ CREATE TABLE IF NOT EXISTS `groupee`.`members` (
     FOREIGN KEY (`member_id`) REFERENCES `groupee`.`student`(`student_id`)
 );
 
+CREATE TABLE IF NOT EXISTS `groupee`.`roles` (
+
+    `role_id` INT(3) UNIQUE NOT NULL,
+    `role_name` VARCHAR(54) NOT NULL,
+
+    PRIMARY KEY (`role_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `groupee`.`user_roles` (
+    `role_id` INT(3) ,
+    `username` VARCHAR(15) ,
+
+    FOREIGN KEY (`role_id`) REFERENCES `groupee`.`roles`(`role_id`),
+    FOREIGN KEY (`username`) REFERENCES `groupee`.`account`(`username`)
+);
+
 INSERT IGNORE INTO `groupee`.`student` (`student_id`, `section_no`, `major`, `first_name`, `middle_name`, `last_name`)
 VALUES (111111, 2, 'CS', 'Student1_First', NULL, 'Student1_Last'),
        (222222, 2, 'CS', 'Student2_First', NULL, 'Student2_Last'),
@@ -101,3 +117,14 @@ VALUES ('S1_user', 111111),
 INSERT IGNORE INTO `groupee`. `professor` (`id`, `username`)
 VALUES (999999, 'Prof1_user'),
        (888888, 'Prof2_user');
+
+INSERT IGNORE INTO `groupee`. `roles` (`role_id`, `role_name`)
+VALUES (1, 'User'),
+       (2, 'Student'),
+       (3, 'Professor');
+
+INSERT IGNORE INTO `groupee`. `user_roles` (`role_id`, `username`)
+VALUES (1, 'S1_User'),
+       (2, 'S3_User'),
+       (3, 'S5_User');
+       
