@@ -6,12 +6,12 @@ import LoginForm from "./components/login/LoginForm";
 import NavBar from "./components/navigation/NavBar";
 import SignUpForm from "./components/signup/SignUpForm";
 
-function App() {
+const App: React.FC = () => {
   return (
     <div className="App">
       <NavBar />
       <Routes>
-        <Route path="/login" element={<LoginForm />} />
+        <Route path="/login" element={<LoginForm /> } />
         <Route path="/signup" element={<SignUpForm />} />
         <Route path="/" element={<HomeScreen />} />
         <Route path="/requestform" element={<RequestForm />} />

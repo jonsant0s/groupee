@@ -9,4 +9,5 @@ export interface signupForm {
     first_name: string;
     middle_name?: string | undefined;
     last_name: string;
+    roles: number;
 }
