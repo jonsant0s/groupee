@@ -3,6 +3,7 @@ import { database } from "../database"
 import { signupForm, loginForm } from "../interface/Account"
 import { userBoard } from "./role";
 
+const config = require("../config/auth");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -10,24 +11,52 @@ export async function login(req: Request, res: Response) {
     const db = await database();
     const { username, password }: loginForm = req.body;
 
-    const result = await db.query (
+    const result1 = await db.query (
                 `SELECT password FROM groupee.account
                  WHERE username="${username}"`);
 
-    const data = Object(result[0])[0];
+    const data1 = Object(result1[0])[0];
     
-    if(data) {
+    if(data1) {
         const match = await bcrypt.compareSync(
             password,
-            data.password
+            data1.password
         );
         if (!match) {
-            return res.json(`Incorrect password.`);
+            return res.status(401).send({
+                accessToken: null,
+                message: "Incorrect password."});
         } else {
-            return res.json(`Welcome back "${username}"!`);
+        
+            var token = await jwt.sign({ username: data1.username }, config.secret, {
+                expiresIn: 86400 // 24 hours
+            });
+            
+            var authorities: string[] = [];
+            const result2 = await db.query(
+                        `SELECT role_id FROM groupee.user_roles
+                        WHERE username="${username}"`);
+            const data2 = Object(result2[0])[0];
+            
+            if (data2){
+
+                const result3 = await db.query(
+                    `SELECT role_name FROM groupee.roles
+                    WHERE role_id=${data2.role_id}`);
+                const data3 = Object(result3[0])[0];
+        
+                if(data3){
+                    authorities.push("ROLE_"+data3.role_name);
+                    return res.status(200).send({
+                        username: username,
+                        roles: authorities,
+                        accessToken: token
+                    })
+                }
+            }
         }
     } else {
-        return res.json(`Account with username "${username}" does not exist.`);
+        return res.status(404).send(`Account with username "${username}" does not exist.`);
     }
 }
 
