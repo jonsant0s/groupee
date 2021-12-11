@@ -1,6 +1,35 @@
-import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink } from 'react-router-dom';
+
+import * as AuthService from "../../services";
+
+import EventBus from "../../common/EventBus";
 
 export const NavBar = () => {
+    const [showUserBoard, setShowUserBoard] = useState(false);
+    const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
+
+    useEffect(() => {
+        const user = AuthService.getCurrentUser();
+
+        if (user) {
+            setCurrentUser(user);
+            setShowUserBoard(user.roles.includes("ROLE_User"));
+        }
+
+        EventBus.on("logout", logOut);
+
+        return () => {
+            EventBus.remove("logout", logOut);
+        }
+    }, []);
+
+    const logOut = () => {
+        AuthService.logout();
+        setShowUserBoard(false);
+        setCurrentUser(undefined);
+    };
+
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -18,18 +47,52 @@ export const NavBar = () => {
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
-
-                <div
-                    className="collapse navbar-collapse"
-                    id="navbarSupportedContent"
-                >
-                    <ul className="navbar-nav ml-auto">
+                <div className="navbar-nav mr-auto">
+                    {showUserBoard && (
                         <li className="nav-item">
-                            <NavLink className="nav-link" to="/profile">
-                                Profile
+                            <NavLink className="nav-link" to="/user">
+                                User Board
                             </NavLink>
                         </li>
-                    </ul>
+                    )}
+                    {currentUser && (
+                        <li className="nav-item">
+                            <NavLink to={"/user"} className="nav-link">
+                                User
+                            </NavLink>
+                        </li>
+                    )}
+                    
+                </div>
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                {currentUser ? (
+                    <div className="navbar-nav ml-auto">
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to="/profile">
+                                {currentUser.username}
+                            </NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to="/login" onClick={logOut}>
+                                Log Out
+                            </NavLink>
+                        </li>
+                    </div>
+                    
+                ) : (
+                    <div className="navbar-nav ml-auto">
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to="/login">
+                                Login
+                            </NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to="/register">
+                                Sign Up
+                            </NavLink>
+                        </li>
+                    </div>
+                )}
                 </div>
             </nav>
         </div>

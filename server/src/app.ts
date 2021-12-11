@@ -5,6 +5,9 @@ import cors from "cors";
 import IndexRoutes from "./routes";
 import AccountRequest from "./routes/account";
 import GroupRequests from "./routes/groupRequests";
+import RoleRoutes from "./routes/role";
+
+import { header } from "./middleware/account";
 
 const allowedOrigins = ["http://localhost:3000"];
 
@@ -29,6 +32,7 @@ export class App {
     middlewares() {
         this.app.use(morgan("dev"));
         this.app.use(cors(options));
+        this.app.use(header);
         this.app.use(express.json());
     }
 
@@ -36,6 +40,7 @@ export class App {
         this.app.use(IndexRoutes);
         this.app.use("/authentication", AccountRequest);
         this.app.use("/requests", GroupRequests);
+        this.app.use("/role", RoleRoutes);
     }
 
     async listen() {

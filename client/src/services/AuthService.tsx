@@ -6,18 +6,15 @@ const API_URL = "http://localhost:3001/";
 
 export const login = (credentials : LoginInfo) => {
     return axios
-        .post(API_URL + "authentication/login", {
-            username: credentials.username,
-            password: credentials.password,
-        })
+        .post(API_URL + "authentication/login", credentials)
         .then((response) => {
             console.log(response.data);
             console.log(credentials.username, credentials.password);
-            /*
+
             if(response.data.accessToken) {
                 localStorage.setItem("user", JSON.stringify(response.data));
             }
-            */
+
             return response.data;
         })
         .catch((err) => { return (err) });
