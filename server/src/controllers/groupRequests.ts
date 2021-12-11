@@ -1,18 +1,7 @@
 import { Request, Response } from "express";
 import { database } from "../database";
-// If prof, sees every request made
-// If student, sees only the request they made
-interface NewRequest {
-    id: number;
-    members: string;
-    availability: string | any;
-    size: number;
-}
+import { Credentials, NewRequest } from "../types";
 
-interface Credentials {
-    username: string;
-    password: string;
-}
 
 export async function getGroupRequests(req: Request, res: Response) {
     const db = await database();
@@ -28,7 +17,7 @@ export async function getGroupRequests(req: Request, res: Response) {
     );
 
     const data = Object(id[0])[0];
-
+    
     if (data) {
         const result = await db.query(
             `SELECT * FROM groupee.group_request
@@ -60,8 +49,7 @@ export async function createGroupRequest(req: Request, res: Response) {
     const db = await database();
     const pref: NewRequest = req.body;
 
-    db.query(
-        `
+    db.query(`
         INSERT INTO groupee.group_request (requester_id, requested_members, availability, size)
         VALUES ("${pref.id}", 
                 "${pref.members}", 

@@ -44,7 +44,6 @@ CREATE TABLE IF NOT EXISTS `groupee`. `course` (
 
 CREATE TABLE IF NOT EXISTS `groupee`. `classlist` (
     `course_id` INT(4) NOT NULL,
-    `section_size` INT(3),
     `student_id` INT(6) NOT NULL,
 
     FOREIGN KEY (`course_id`) REFERENCES `groupee`.`course`(`course_id`),
@@ -79,7 +78,6 @@ CREATE TABLE IF NOT EXISTS `groupee`.`members` (
 );
 
 CREATE TABLE IF NOT EXISTS `groupee`.`roles` (
-
     `role_id` INT(3) UNIQUE NOT NULL,
     `role_name` VARCHAR(54) NOT NULL,
 
@@ -94,6 +92,18 @@ CREATE TABLE IF NOT EXISTS `groupee`.`user_roles` (
     FOREIGN KEY (`username`) REFERENCES `groupee`.`account`(`username`)
 );
 
+
+CREATE TABLE IF NOT EXISTS `groupee`. `comments` (
+    `requester_id` INT(6),
+    `student_id` INT(6),
+    `interested` INT(1),
+    `content` VARCHAR(255),
+    
+    FOREIGN KEY (`student_id`) REFERENCES `groupee`.`student`(`student_id`),
+    FOREIGN KEY (`requester_id`) REFERENCES `groupee`. `group_request`(`requester_id`)
+);
+
+
 INSERT IGNORE INTO `groupee`.`student` (`student_id`, `section_no`, `major`, `first_name`, `middle_name`, `last_name`)
 VALUES (111111, 2, 'CS', 'Student1_First', NULL, 'Student1_Last'),
        (222222, 2, 'CS', 'Student2_First', NULL, 'Student2_Last'),
@@ -101,6 +111,32 @@ VALUES (111111, 2, 'CS', 'Student1_First', NULL, 'Student1_Last'),
        (444444, 1, 'CS', 'Student4_First', NULL, 'Student4_Last'),
        (555555, 1, 'CS', 'Student5_First', NULL, 'Student5_Last'),
        (666666, 1, 'CS', 'Student6_First', NULL, 'Student6_Last');
+
+INSERT IGNORE INTO `groupee`.`course`(`course_id`,`course_name`,`instructor_id`)
+VALUES (471, 'DB', 999999),
+       (457, 'OS', 999999),
+       (143, 'EBERLY', 888888);
+
+
+INSERT IGNORE INTO `groupee`.`classlist` (`course_id`,`student_id`)
+VALUES (471, 111111),
+       (471, 222222),
+       (143, 222222),
+       (143, 111111),
+       (471, 555555),
+       (457, 666666),
+       (457, 555555),
+       (143, 555555),
+       (143, 333333),
+       (457, 333333);
+
+
+INSERT IGNORE INTO `groupee`.`account` (`username`, `password`, `first_name`, `middle_name`, `last_name`)
+VALUES ('S1_user', 'password', 'Student1_First', NULL, 'Student1_Last'),
+       ('S3_user', 'password', 'Student3_First', NULL, 'Student3_Last'),
+       ('S5_user', 'password', 'Student5_First', NULL, 'Student5_Last'),
+       ('Prof1_user', 'password', 'Prof1_First', NULL, 'Prof1_Last'),
+       ('Prof2_user', 'password', 'Prof2_First', NULL, 'Prof2_Last');
 
 INSERT IGNORE INTO `groupee`.`account` (`username`, `password`, `first_name`, `middle_name`, `last_name`)
 VALUES ('S1_user', 'password', 'Student1_First', NULL, 'Student1_Last'),

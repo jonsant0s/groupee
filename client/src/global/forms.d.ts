@@ -1,19 +1,21 @@
-interface SignUpInfo {
-    first_name: string,
-    last_name: string,
-    username: string,
-    password: string
-}
-
 interface LoginInfo {
     username: string,
     password: string
 }
 
-interface IUser {
-    username: string,
-    password: string,
-    roles?: string
+interface SignUpInfo extends LoginInfo {
+    first_name: string,
+    last_name: string
+}
+
+interface UserInfo extends SignUpInfo {
+    roles: string,
+    session_token: string
+}
+
+enum Roles {
+    Prof,
+    Student
 }
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>

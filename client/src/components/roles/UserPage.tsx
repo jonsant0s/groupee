@@ -5,21 +5,14 @@ export const UserPage = () => {
   const [content, setContent] = useState<string>("");
 
   useEffect(() => {
-    getUserPage().then(
-      (response) => {
+    getUserPage()
+    .then((response) => {
+        console.log(response.data);
         setContent(response.data);
-      },
-      (error) => {
-        const _content =
-          ( error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-            error.message ||
-            error.toString();
-
-        setContent(_content);
-      }
-    );
+    })
+    .catch((error) => {
+        setContent(error.toString());
+    });
   }, []);
 
   return (

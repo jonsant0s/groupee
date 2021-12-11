@@ -1,5 +1,4 @@
-import { useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { Days, RequestInput } from "./types";
 
 export const RequestForm = () => {
@@ -8,7 +7,14 @@ export const RequestForm = () => {
         group_size: 0
     });
 
+    useEffect(() => {
+        console.log(requestInfo);
+    });
+    
     const handleInputChange = (e: ChangeEvent) => {
+        // e.target.id = attribute/property
+        console.log(e.target.id);
+
         e.persist();
         let prev = {...requestInfo};
         prev[e.target.id] = e.target.value;
@@ -18,10 +24,10 @@ export const RequestForm = () => {
 
     const onSubmit = (e: FormEvent) => {
         e.preventDefault();
-
-        axios
-            .post("https://jsonplaceholder.typicode.com/posts", requestInfo)
-            .then((res) => console.log(res.data));
+        console.log(e);
+        // axios
+        //     .post("https://jsonplaceholder.typicode.com/posts", requestInfo)
+        //     .then((res) => console.log(res.data));
     };
 
     return (
