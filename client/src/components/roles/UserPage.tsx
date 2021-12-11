@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { getUserPage } from "../../services";
 
-import { getUserPage } from "../../services/UserService";
-
-const UserPage: React.FC = () => {
-    const [content, setContent] = useState<string>("");
+export const UserPage = () => {
+  const [content, setContent] = useState<string>("");
 
   useEffect(() => {
     getUserPage().then(
@@ -12,11 +11,11 @@ const UserPage: React.FC = () => {
       },
       (error) => {
         const _content =
-          (error.response &&
+          ( error.response &&
             error.response.data &&
             error.response.data.message) ||
-          error.message ||
-          error.toString();
+            error.message ||
+            error.toString();
 
         setContent(_content);
       }
@@ -31,5 +30,3 @@ const UserPage: React.FC = () => {
     </div>
   );
 };
-
-export default UserPage;

@@ -1,15 +1,11 @@
-import React from 'react';
 import { useState, useEffect } from "react";
 import { NavLink } from 'react-router-dom';
 
-import * as AuthService from "../../services/AuthService";
-import IUser from '../../types/type';
-
-import "bootstrap/dist/css/bootstrap.css";
+import * as AuthService from "../../services";
 
 import EventBus from "../../common/EventBus";
 
-const NavBar: React.FC = () => {
+export const NavBar = () => {
     const [showUserBoard, setShowUserBoard] = useState(false);
     const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
 
@@ -41,13 +37,13 @@ const NavBar: React.FC = () => {
                     Groupee
                 </NavLink>
                 <button
-                className="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
+                    className="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -100,8 +96,5 @@ const NavBar: React.FC = () => {
                 </div>
             </nav>
         </div>
-
     );
 };
-
-export default NavBar;

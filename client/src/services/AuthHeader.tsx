@@ -1,14 +1,14 @@
 import { AxiosRequestHeaders } from "axios";
 
 interface User {
-    accessToken?: string
+    accessToken?: string;
 }
 
-export default function AuthHeader(): AxiosRequestHeaders {
-    const user = JSON.parse(String(localStorage.getItem("user"))) as User || null;
-    
-    if (user && user.accessToken){
-        return { 'x-access-token': user.accessToken };
+export const AuthHeader = () : AxiosRequestHeaders => {
+    const user: User = JSON.parse(JSON.stringify(localStorage.getItem("user"))) || null;
+
+    if (user && user.accessToken) {
+        return { "x-access-token": user.accessToken };
     } else {
         return {};
     }

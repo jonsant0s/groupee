@@ -1,4 +1,3 @@
-import React from 'react';
 import Table from "react-bootstrap/esm/Table";
 
 export const RequestList = () => {
@@ -8,11 +7,11 @@ export const RequestList = () => {
             <Table bordered hover>
                 <thead>
                     <tr>
-                    <th>Request id#</th>
-                    <th>Status</th>
-                    <th>Requested by</th>
-                    <th>Members</th>
-                    <th>Availability</th>
+                        <th>Request id#</th>
+                        <th>Status</th>
+                        <th>Requested by</th>
+                        <th>Members</th>
+                        <th>Availability</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,5 +39,5 @@ export const RequestList = () => {
                 </tbody>
             </Table>
         </div>
-    )
-}
+    );
+};
