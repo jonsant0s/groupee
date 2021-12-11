@@ -11,3 +11,8 @@ export interface signupForm {
     last_name: string;
     roles: number;
 }
+
+export interface checkRoleForm {
+    username: string;
+    role_id: string;
+}

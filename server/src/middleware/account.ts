@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-const config = require("../config/auth.ts");
+import { checkRoleForm } from "../interface/Account"
+import { database } from "../database"
 
+const config = require("../config/auth.ts");
 const jwt = require("jsonwebtoken");
 
 export async function verifyToken(req: Request, res: Response, next: NextFunction){
-    let token = req.headers["x-access-token"];
+    let token = await req.headers["x-access-token"];
 
     if(!token) {
         return res.status(403).send({
@@ -21,3 +23,51 @@ export async function verifyToken(req: Request, res: Response, next: NextFunctio
         next();
     });
 };
+
+export async function isStudent(req: Request, res: Response, next: NextFunction){
+    const db = await database();
+    const { username, role_id }: checkRoleForm = req.body;
+    
+    const data1 = await db.query(
+                `SELECT username FROM groupee.account
+                 WHERE username="${username}"`);
+    const result1 = Object(data1[0])[0];
+    if (result1.role_id == "2"){
+        return res.status(200).send({
+            message: "Welcome Student!"
+        });
+    }
+
+    return res.status(403).send({
+        message: "Require Student Role!"
+    });
+
+}
+
+export async function isProfessor(req: Request, res: Response, next: NextFunction){
+    const db = await database();
+    const { username, role_id }: checkRoleForm = req.body;
+    
+    const data1 = await db.query(
+                `SELECT username FROM groupee.account
+                 WHERE username="${username}"`);
+    const result1 = Object(data1[0])[0];
+    if (result1.role_id == "3"){
+        return res.status(200).send({
+            message: "Welcome Professor!"
+        });
+    }
+
+    return res.status(403).send({
+        message: "Require Professor Role!"
+    });
+
+}
+
+export async function header(req: Request,res: Response,next: NextFunction) {
+    res.header(
+        "Access-Control-Allow-Headers",
+        "x-access-token, Origin, Content-Type, Accept"
+    );
+    next();
+}
