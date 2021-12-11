@@ -29,14 +29,14 @@ export const LoginForm = () => {
     const handleLogin = (e: FormEvent) => {
         const form = e.currentTarget;
 
-        if (form.checkValidity() === true) {
+        if (form.checkValidity()) {
             e.preventDefault();
-
-            console.log(loginValues);
 
             login(loginValues)
             .then(() => {
+                console.log(loginValues);
                 navigate("/profile");
+                window.location.reload();
             })
             .catch((err) => {
                 setMessage(err);

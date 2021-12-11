@@ -1,17 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
-
-interface RequestInput {
-    student_id: number,
-    group_size: number,
-    availability: Days 
-}
+import { Days, RequestInput } from "./types";
 
 export const RequestForm = () => {
     const [requestInfo, setRequestInfo] = useState<RequestInput>({
         student_id: 0,
-        group_size: 0,
-        availability: Days.Monday
+        group_size: 0
     });
 
     const handleInputChange = (e: ChangeEvent) => {

@@ -10,6 +10,12 @@ interface LoginInfo {
     password: string
 }
 
+interface IUser {
+    username: string,
+    password: string,
+    roles?: string
+}
+
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
 type FormEvent = React.FormEvent<EventTarget & HTMLButtonElement | HTMLFormElement>
 // Need role?

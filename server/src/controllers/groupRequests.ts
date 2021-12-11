@@ -1,12 +1,22 @@
 import { Request, Response } from "express";
 import { database } from "../database";
-import { createNewRequest, getRequests } from "../interface/Preference";
-
 // If prof, sees every request made
 // If student, sees only the request they made
+interface NewRequest {
+    id: number;
+    members: string;
+    availability: string | any;
+    size: number;
+}
+
+interface Credentials {
+    username: string;
+    password: string;
+}
+
 export async function getGroupRequests(req: Request, res: Response) {
     const db = await database();
-    const { username }: getRequests = req.body;
+    const { username }: Credentials = req.body;
 
     const id = await db.query(
         `SELECT S.student_id
@@ -26,18 +36,17 @@ export async function getGroupRequests(req: Request, res: Response) {
         );
 
         return res.json(result[0]);
+
     } else {
         const pid = await db.query(
             `SELECT id FROM groupee.professor
-            WHERE username="${username}"`
+             WHERE username="${username}"`
         );
 
         const pdata = Object(pid[0])[0];
 
         if (pdata) {
-            const result = await db.query(
-                `SELECT * FROM groupee.group_request`
-            );
+            const result = await db.query(`SELECT * FROM groupee.group_request`);
             return res.json(result[0]);
         } else {
             return res.json({
@@ -49,7 +58,7 @@ export async function getGroupRequests(req: Request, res: Response) {
 
 export async function createGroupRequest(req: Request, res: Response) {
     const db = await database();
-    const pref: createNewRequest = req.body;
+    const pref: NewRequest = req.body;
 
     db.query(
         `

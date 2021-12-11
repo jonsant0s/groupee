@@ -1,4 +1,4 @@
-enum Days {
+export enum Days {
     Monday = "Monday",
     Tuesday = "Tuesday",
     Wednesday = "Wednesday",
@@ -6,4 +6,10 @@ enum Days {
     Friday = "Friday",
     Saturday = "Saturday",
     Sunday = "Sunday"
+}
+
+export interface RequestInput {
+    student_id: number,
+    group_size: number,
+    availability?: Days
 }
