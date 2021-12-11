@@ -1,13 +1,20 @@
 import express, { Application } from "express";
 import morgan from "morgan";
+import cors from 'cors';
 
 import IndexRoutes from "./routes";
 import AccountRequest from "./routes/account";
 import GroupRequests from "./routes/groupRequests";
 
+const allowedOrigins = ['http://localhost:3000'];
+
+const options: cors.CorsOptions = {
+  origin: allowedOrigins
+};
+
 export class App {
     private app: Application;
-
+    
     constructor(private port?: number | string) {
         this.app = express();
         this.settings();
@@ -21,6 +28,7 @@ export class App {
 
     middlewares() {
         this.app.use(morgan('dev'));
+        this.app.use(cors(options));
         this.app.use(express.json());
     }
 
