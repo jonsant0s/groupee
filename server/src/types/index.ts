@@ -23,3 +23,8 @@ export interface CheckRoleForm {
     username: string;
     role_id: string;
 }
+
+export interface ClassList {
+    course_name: string;
+    student_id: number | null;
+}

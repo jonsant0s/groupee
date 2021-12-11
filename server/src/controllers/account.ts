@@ -1,4 +1,5 @@
 import { Credentials, SignUpForm, PostPayload } from "../types";
+import { Request, Response } from "express";
 import { database } from "../database";
 import { userBoard } from "./role";
 
@@ -6,7 +7,7 @@ const config = require("../config/auth");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-export async function login({req, res}:PostPayload) {
+export async function login(req: Request, res: Response) {
     const db = await database();
     const { username, password }: Credentials = req.body;
 
@@ -37,7 +38,7 @@ export async function login({req, res}:PostPayload) {
                          WHERE username="${username}"`);
 
             const data2 = Object(result2[0])[0];
-            
+
             if (data2) {
                 const result3 = await db.query(
                     `SELECT role_name FROM groupee.roles
@@ -48,11 +49,12 @@ export async function login({req, res}:PostPayload) {
                 if(data3) {
                     console.log(`Logged in as "${username}" (role ${data3.role_name}).`);
                     authorities.push("ROLE_"+data3.role_name);
+                    
                     return res.status(200).send({
                         username: username,
                         roles: authorities,
                         accessToken: token
-                    })
+                    });
                 }
             }
         }
@@ -62,7 +64,7 @@ export async function login({req, res}:PostPayload) {
     }
 }
 
-export async function signup({req, res}:PostPayload) {
+export async function signup(req: Request, res: Response) {
     const db = await database();
     const form: SignUpForm = req.body;
     const salt = await bcrypt.genSalt(8);

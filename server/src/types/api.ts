@@ -5,7 +5,8 @@ export interface GetObj {
     next?: NextFunction
 }
 
-export interface PostPayload extends GetObj {
-    req: Request
+export interface PostPayload {
+    res: Response,
+    req: Request,
+    next?: NextFunction
 }
-

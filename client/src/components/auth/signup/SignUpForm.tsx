@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { register } from "../../../services/AuthService";
+import { register } from "../../../services";
 
 import Button from "react-bootstrap/esm/Button";
 import Dropdown from "react-bootstrap/esm/Dropdown";
@@ -12,7 +12,6 @@ import "./SignUpForm.css";
 export const SignUpForm = () => {
     const navigate = useNavigate();
 
-    const [message, setMessage] = useState("");
     const [validated, setValidated] = useState(false);
     const [accountType, setAccountType] = useState("Account Type");
 
@@ -22,12 +21,12 @@ export const SignUpForm = () => {
         username: "",
         password: "",
     });
-
+    
     const handleInputChange = (e: ChangeEvent) => {
         e.persist();
         let prev = {...registerValues};
         prev[e.target.id] = e.target.value;
-        
+
         setRegister(prev);
     };
 
@@ -44,7 +43,7 @@ export const SignUpForm = () => {
                 navigate("/profile");
             })
             .catch((err) => {
-                setMessage(err);
+                console.log(err);
             });
         }
         setValidated(true);
