@@ -49,6 +49,8 @@ const LoginForm: React.FC = () => {
       login(loginValues.username, loginValues.password).then(()=> {
         
         navigate("/profile");
+        window.location.reload();
+
         
       },
         (error) => {
