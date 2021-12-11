@@ -7,14 +7,14 @@ export const getPublicContent = () => {
     return axios.get(API_URL + 'all');
 };
 
-export const getUserBoard = () => {
+export const getUserPage = () => {
     return axios.get(API_URL + 'user', { headers: AuthHeader() });
 };
 
-export const getStudentBoard = () => {
+export const getStudentPage = () => {
     return axios.get(API_URL + 'stud', { headers: AuthHeader() });
 };
 
-export const getProfessorBoard = () => {
+export const getProfessorPage = () => {
     return axios.get(API_URL + 'prof', { headers: AuthHeader() });
 };

@@ -12,11 +12,11 @@ export const login = (username: string, password: string) => {
     }).then(response => {
         console.log(response.data)
         console.log(username, password)
-        /*
+        
         if(response.data.accessToken) {
             localStorage.setItem("user", JSON.stringify(response.data));
         }
-        */
+        
         return response.data;
     });
     
