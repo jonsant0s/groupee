@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { database } from "../database";
 
 const fs = require("fs");
 
-export async function initializeTables(req: Request, res: Response) {
+export async function initializeTables(res: Response) {
     const db = await database();
     const tables = fs.readFileSync("./sql/database.sql").toString();
 

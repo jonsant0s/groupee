@@ -1,4 +1,4 @@
-import { Credentials, SignUpForm, PostPayload } from "../types";
+import { Credentials, SignUpForm } from "../types";
 import { Request, Response } from "express";
 import { database } from "../database";
 import { userBoard } from "./role";

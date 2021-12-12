@@ -24,7 +24,7 @@ export async function verifyToken({req, res, next}: PostPayload) {
     });
 };
 
-export async function isStudent({req, res, next}: PostPayload){
+export async function isStudent({req, res}: PostPayload) {
     const db = await database();
     const { username, role_id }: CheckRoleForm = req.body;
     
@@ -46,7 +46,7 @@ export async function isStudent({req, res, next}: PostPayload){
 
 }
 
-export async function isProfessor({ req, res }: PostPayload){
+export async function isProfessor({ req, res }: PostPayload) {
     const db = await database();
     const { username, role_id }: CheckRoleForm = req.body;
     
@@ -68,7 +68,7 @@ export async function isProfessor({ req, res }: PostPayload){
 
 }
 
-export async function header({res, next}: GetObj) {
+export async function header({ res, next }: GetObj) {
     res.header(
         "Access-Control-Allow-Headers",
         "x-access-token, Origin, Content-Type, Accept"

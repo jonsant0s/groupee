@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { database } from "../database";
 import { Credentials, NewRequest } from "../types";
 
-
 export async function getGroupRequests(req: Request, res: Response) {
     const db = await database();
     const { username }: Credentials = req.body;
