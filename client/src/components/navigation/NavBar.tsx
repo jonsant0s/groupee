@@ -7,7 +7,7 @@ import EventBus from "../../common/EventBus";
 
 export const NavBar = () => {
     const [showUserBoard, setShowUserBoard] = useState(false);
-    const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
+    const [currentUser, setCurrentUser] = useState<UserInfo | undefined>(undefined);
 
     useEffect(() => {
         const user = AuthService.getCurrentUser();

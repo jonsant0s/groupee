@@ -7,9 +7,3 @@ export enum Days {
     Saturday = "Saturday",
     Sunday = "Sunday"
 }
-
-export interface RequestInput {
-    student_id: number,
-    group_size: number,
-    availability?: Days
-}
