@@ -4,21 +4,21 @@ import { Days } from "../../global/days";
 export const RequestForm = () => {
     const [requestInfo, setRequestInfo] = useState<RequestInput>({
         student_id: 0,
-        group_size: 0
+        group_size: 0,
     });
 
     useEffect(() => {
         console.log(requestInfo);
     });
-    
+
     const handleInputChange = (e: ChangeEvent) => {
         // e.target.id = attribute/property
         console.log(e.target.id);
 
         e.persist();
-        let prev = {...requestInfo};
+        let prev = { ...requestInfo };
         prev[e.target.id] = e.target.value;
-        
+
         setRequestInfo(prev);
     };
 
@@ -45,7 +45,7 @@ export const RequestForm = () => {
                             className="form-control"
                             id="student_id"
                             name="student_id"
-                            value={requestInfo!.student_id}
+                            value={requestInfo.student_id || ""}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -56,7 +56,7 @@ export const RequestForm = () => {
                             className="form-control"
                             id="group_size"
                             name="group_size"
-                            value={requestInfo!.group_size}
+                            value={requestInfo.group_size || ""}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -66,14 +66,12 @@ export const RequestForm = () => {
                             id="availability"
                             className="form-select"
                             name="availability"
-                            value={requestInfo!.availability}
+                            value={requestInfo.availability || ""}
                             onChange={handleInputChange}
                         >
-                            { 
-                                Object.keys(Days).map((day) => {
-                                    return <option>{day}</option>;
-                                })
-                            }
+                            {Object.keys(Days).map((day) => {
+                                return <option>{day}</option>;
+                            })}
                         </select>
                     </div>
                 </div>

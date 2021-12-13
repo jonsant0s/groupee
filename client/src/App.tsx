@@ -7,6 +7,7 @@ import { NavBar } from "./components/navigation/NavBar";
 import { Forum } from "components/forum";
 
 import "./App.css";
+import ClasslistScreen from "components/classlist/ClasslistScreen";
 
 const App = () => {
     return (
@@ -18,7 +19,7 @@ const App = () => {
                 <Route path="/signup" element={<SignUpForm />} />
                 <Route path="/requestform" element={<RequestForm />} />
                 <Route path="/requestlist" element={<RequestList />} />
-                <Route path="/requestform" element={<RequestForm />} />
+                <Route path="/classlist" element={<ClasslistScreen />} />
                 <Route path="/forum" element={<Forum />} />
             </Routes>
         </div>
