@@ -12,6 +12,7 @@ import "./SignUpForm.css";
 export const SignUpForm = () => {
     const navigate = useNavigate();
 
+    // const [message, setMessage] = useState("");
     const [validated, setValidated] = useState(false);
     const [accountType, setAccountType] = useState("Account Type");
 
@@ -44,6 +45,7 @@ export const SignUpForm = () => {
             })
             .catch((err) => {
                 console.log(err);
+                // setMessage(err);
             });
         }
         setValidated(true);

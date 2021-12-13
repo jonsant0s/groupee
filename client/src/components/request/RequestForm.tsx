@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Days, RequestInput } from "./types";
+import { Days } from "../../global/days";
 
 export const RequestForm = () => {
     const [requestInfo, setRequestInfo] = useState<RequestInput>({
