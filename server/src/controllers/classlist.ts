@@ -2,9 +2,9 @@ import { database } from "../database";
 import { ClassList } from "../types";
 import { Request, Response } from "express";
 
-export async function searchStudent (req: Request, res: Response) {
+export async function searchStudent (req: Request | any, res: Response) {
     const db = await database();
-    const { course_name, student_id }: ClassList = req.body;
+    const { course_name, student_id }: ClassList = req.query;
 
     db.query(`
             SELECT *
