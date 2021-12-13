@@ -10,7 +10,7 @@ import "./LoginForm.css";
 export const LoginForm = () => {
     const navigate = useNavigate();
 
-    const [loginValues, setLogin] = useState<LoginInfo> ({
+    const [loginValues, setLogin] = useState<LoginInfo>({
         username: "",
         password: "",
     });
@@ -20,9 +20,9 @@ export const LoginForm = () => {
 
     const handleInputChange = (e: ChangeEvent) => {
         e.persist();
-        let prev = {...loginValues};
+        let prev = { ...loginValues };
         prev[e.target.id] = e.target.value;
-        
+
         setLogin(prev);
     };
 
@@ -33,16 +33,16 @@ export const LoginForm = () => {
             e.preventDefault();
 
             login(loginValues)
-            .then(() => {
-                console.log(loginValues);
-                navigate("/profile");
-                window.location.reload();
-            })
-            .catch((err) => {
-                setMessage(err);
-            });
+                .then(() => {
+                    console.log(loginValues);
+                    navigate("/profile");
+                    window.location.reload();
+                })
+                .catch((err) => {
+                    setMessage(err);
+                });
         }
-        
+
         // Unreachable code if user is navigated to profile?
         setValidated(true);
     };
@@ -105,10 +105,10 @@ export const LoginForm = () => {
                     <NavLink className="nav-link" to="/signup">
                         Sign Up Here
                     </NavLink>
-                    { message && (
+                    {message && (
                         <div className="form-group">
                             <div className="alert alert-danger" role="alert">
-                                { message }
+                                {message}
                             </div>
                         </div>
                     )}

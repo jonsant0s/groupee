@@ -1,3 +1,8 @@
+interface ClassListSearchInfo {
+    course_name: string;
+    student_id: number | null;
+}
+
 interface LoginInfo {
     username: string,
     password: string
