@@ -14,7 +14,7 @@ export const NavBar = () => {
         
         if (user) {
             setCurrentUser(user);
-            setShowUserBoard(user.roles.includes("ROLE_User"));
+            setShowUserBoard(user.role.includes("ROLE_User"));
         }
 
         EventBus.on("logout", logOut);
@@ -87,7 +87,7 @@ export const NavBar = () => {
                             </NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink className="nav-link" to="/register">
+                            <NavLink className="nav-link" to="/signup">
                                 Sign Up
                             </NavLink>
                         </li>

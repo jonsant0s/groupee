@@ -3,24 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { register } from "../../../services";
 
 import Button from "react-bootstrap/esm/Button";
-import Dropdown from "react-bootstrap/esm/Dropdown";
-import DropdownButton from "react-bootstrap/esm/DropdownButton";
 import Form from "react-bootstrap/esm/Form";
 
 import "./SignUpForm.css";
 
 export const SignUpForm = () => {
     const navigate = useNavigate();
-
-    // const [message, setMessage] = useState("");
     const [validated, setValidated] = useState(false);
-    const [accountType, setAccountType] = useState("Account Type");
 
     const [registerValues, setRegister] = useState<SignUpInfo> ({
+        school_id: 0,
         first_name: "",
         last_name: "",
         username: "",
-        password: "",
+        password: ""
     });
     
     const handleInputChange = (e: ChangeEvent) => {
@@ -41,11 +37,10 @@ export const SignUpForm = () => {
 
             register(registerValues)
             .then(() => { 
-                navigate("/profile");
+                navigate("/");
             })
             .catch((err) => {
                 console.log(err);
-                // setMessage(err);
             });
         }
         setValidated(true);
@@ -129,23 +124,7 @@ export const SignUpForm = () => {
                             Please provide a password.
                         </Form.Control.Feedback>
                     </Form.Group>
-                    <DropdownButton
-                        className="dropdownButton"
-                        variant="secondary"
-                        size="sm"
-                        title={accountType}
-                    >
-                        <Dropdown.Item
-                            onClick={ () => setAccountType("Student")}
-                        >
-                            Student
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                            onClick={() => setAccountType("Professor")}
-                        >
-                            Professor
-                        </Dropdown.Item>
-                    </DropdownButton>
+
                     <Button
                         className="submitButton"
                         variant="primary"

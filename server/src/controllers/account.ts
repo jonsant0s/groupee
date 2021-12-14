@@ -1,7 +1,6 @@
-import { Credentials, SignUpForm } from "../types";
+import { Credentials, SignUpForm, UserInfo } from "../types";
 import { Request, Response } from "express";
 import { database } from "../database";
-import { userBoard } from "./role";
 
 const config = require("../config/auth");
 const bcrypt = require("bcryptjs");
@@ -12,54 +11,50 @@ export async function login(req: Request, res: Response) {
     const { username, password }: Credentials = req.body;
 
     const result1 = await db.query (
-                `SELECT password FROM groupee.account
+                `SELECT * FROM groupee.account
                  WHERE username="${username}"`);
 
     const data1 = Object(result1[0])[0];
     
     if(data1) {
-        const match = await bcrypt.compareSync(
-            password,
-            data1.password
-        );
-        if (!match) {
+        const match = bcrypt.compareSync(password, data1.password); 
+        
+         // Comparing without bycrypt since the existing accounts don't have hashed passwords
+        if (!match && password != data1.password) {
             return res.status(401).send({
                 accessToken: null,
                 message: "Incorrect password."});
         } else {
-            var token = await jwt.sign({ username: data1.username }, config.secret, {
-                expiresIn: 86400 // 24 hours
-            });
-            
-            var authorities: string[] = [];
+            var token = await jwt.sign({ username: data1.username }, config.secret, { expiresIn: 86400 }); // 24 hours
 
-            const result2 = await db.query(
-                        `SELECT role_id FROM groupee.user_roles
-                         WHERE username="${username}"`);
-
-            const data2 = Object(result2[0])[0];
-
-            if (data2) {
-                const result3 = await db.query(
-                    `SELECT role_name FROM groupee.roles
-                     WHERE role_id=${data2.role_id}`);
-
-                const data3 = Object(result3[0])[0];
-        
-                if(data3) {
-                    console.log(`Logged in as "${username}" (role ${data3.role_name}).`);
-                    authorities.push("ROLE_"+data3.role_name);
-                    
-                    return res.status(200).send({
-                        username: username,
-                        roles: authorities,
-                        accessToken: token
-                    });
-                }
+            let userInfo:UserInfo = {
+                first_name: data1.first_name,
+                last_name: data1.last_name,
+                school_id: 0,
+                username: username,
+                session_token: token,
+                role: ""
             }
+
+            const professorInfo = await db.query(`SELECT * FROM groupee.professor WHERE username="${username}"`);
+            const prof = Object(professorInfo[0])[0];
+            
+            // Checking if username matches with professor or student
+            if(prof) {
+                userInfo.school_id=prof.professor_id;
+                userInfo.role="Professor";
+
+            } else {
+                const studentInfo = await db.query(`SELECT * FROM groupee.student_account WHERE username="${username}"`);
+                const student = Object(studentInfo[0])[0];
+
+                userInfo.school_id=student.student_id;
+                userInfo.role="Student";
+            }
+
+            return res.status(200).send(userInfo);
         }
     } else {
-        console.log(`Account with username "${username}" does not exist.`);
         return res.status(404).send(`Account with username "${username}" does not exist.`);
     }
 }
@@ -68,6 +63,7 @@ export async function signup(req: Request, res: Response) {
     const db = await database();
     const form: SignUpForm = req.body;
     const salt = await bcrypt.genSalt(8);
+
     var pass = bcrypt.hashSync(form.password, salt);
 
     db.query(`
@@ -78,27 +74,9 @@ export async function signup(req: Request, res: Response) {
                 "${form.middle_name}", 
                 "${form.last_name}")`)
         .then(() => {
-            if (form.roles) {
-                db.query(
-                    `INSERT INTO groupee.user_roles (role_id, username)
-                     VALUES (${form.roles},"${form.username}")`
-                ).then(() => {
-                    return res.send(`Account created with ${form.roles} role!`);
-                });
-            } else {
-                db.query(
-                    `INSERT INTO groupee.user_roles (role_id, username)
-                     VALUES (${1},"${form.username}")`
-                ).then(() => {
-                    return res.send(`Account created with User role!`);
-                });
-            }
+            return res.status(200).send(`$Account created!`);
         })
-        .catch(() => {
-            return res.status(500).send(`${form}\n ${pass}\nAccount with username "${form.username}" already exists.`);
+        .catch((err) => {
+            return res.status(500).send(err);
         });
-}
-
-export async function setRole(req: Request, res: Response) {
-    const db = await database();
 }

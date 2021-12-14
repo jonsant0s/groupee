@@ -12,7 +12,6 @@ export const RequestForm = () => {
     });
 
     const handleInputChange = (e: ChangeEvent) => {
-        // e.target.id = attribute/property
         console.log(e.target.id);
 
         e.persist();

@@ -36,13 +36,13 @@ const group_size = 4;
 
 const mapToCheckbox = (options:any):CheckboxData[] => {
     return options.map((opt) => {
-        return {value: opt, isChecked: false}   
+        return {value: opt, isChecked: false};
     });
 }
 
 export const Forum = () => {
     const [filter, setFilter] = useState<FilterPost>({
-        members: 0,
+        members: group_size,
         section: mapToCheckbox(forumData.sections),
         availability: mapToCheckbox(Object.keys(Days))
     });
@@ -51,13 +51,19 @@ export const Forum = () => {
        console.log(filter); 
     },[filter]);
 
+    // Get request?
+    
     const handleInputChange = (e: ChangeEvent) => {
         e.persist();
 
         let prev = {...filter};
-        let opt = prev[e.target.id][e.target.name];
 
-        opt.isChecked=!opt.isChecked;
+        if(e.target.id == "members") {
+            prev[e.target.id]=parseInt(e.target.value);
+        } else {
+            let checkBox = prev[e.target.id][e.target.name];
+            checkBox.isChecked=!checkBox.isChecked;
+        }
         
         setFilter(prev);
     };
@@ -118,8 +124,8 @@ export const Forum = () => {
                             <h6 className="mt-3">Section:</h6>
                                 { sections.map((sec, i) => { return checkOptions("0", sec, i, "section") }) }
 
-                            <h6 className="mt-3">Member slots: 10</h6>
-                                <Form.Range className="w-50" min={1} max={10}/>
+                            <h6 className="mt-3">Member slots: {filter.members}</h6>
+                                <Form.Range className="w-50" id="members" value={filter.members} min={1} max={group_size} onChange={handleInputChange}/>
 
                             <h6 className="mt-3">Availability:</h6>
                                 { Object.keys(Days).map((day, i) => { return checkOptions(null, day, i, "availability")}) }
