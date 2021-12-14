@@ -19,13 +19,14 @@ export const logout = () => {
 export const register = (userInfo : SignUpInfo) => {
     return axios
         .post(API_URL + "authentication/signup", {
-            school_id: userInfo.school_id,
+            student_id: userInfo.student_id,
             first_name: userInfo.first_name,
             last_name: userInfo.last_name,
             username: userInfo.username,
             password: userInfo.password
         })
         .then((response) => {
+            login(userInfo);
             console.log(response.data);
             return response.data;
         });
