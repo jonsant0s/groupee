@@ -6,19 +6,20 @@ import "./ClasslistScreen.css";
 import { search } from "./ClassListScreenHelpers";
 
 const ClasslistScreen = () => {
-    const [classlistValues, setClasslistValues] = useState<ClassListSearchInfo>(
-        {
+    const [message, setMessage] = useState("");
+    const [classlistValues, setclasslistValues] = useState<any>();
+    const [classlistSearchValues, setclasslistSearchValues] =
+        useState<ClassListSearchInfo>({
             course_name: "",
             student_id: null,
-        }
-    );
+        });
 
     const handleInputChange = (e: ChangeEvent) => {
         e.persist();
-        let prev = { ...classlistValues };
+        let prev = { ...classlistSearchValues };
         prev[e.target.id] = e.target.value;
 
-        setClasslistValues(prev);
+        setclasslistSearchValues(prev);
     };
 
     const handleSearch = (e: FormEvent) => {
@@ -27,12 +28,18 @@ const ClasslistScreen = () => {
         if (form.checkValidity()) {
             e.preventDefault();
 
-            search(classlistValues)
+            search(classlistSearchValues)
                 .then((classlist) => {
-                    console.log(classlist);
+                    const jsonData = JSON.parse(JSON.stringify(classlist));
+                    setclasslistValues(JSON.parse(JSON.stringify(jsonData)));
+                    if (jsonData.length == 0) {
+                        setMessage(
+                            "There are not results for that course. Please check to make sure your course exists or is correctly spelled."
+                        );
+                    }
                 })
                 .catch((err) => {
-                    postMessage(err);
+                    setMessage(err);
                 });
         }
     };
@@ -46,16 +53,16 @@ const ClasslistScreen = () => {
                         <Form.Control
                             type="Course Name"
                             id="course_name"
-                            value={classlistValues.course_name}
+                            value={classlistSearchValues.course_name}
                             onChange={handleInputChange}
                         />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Label>Class id</Form.Label>
+                        <Form.Label>Student id</Form.Label>
                         <Form.Control
                             type="Student Id"
                             id="student_id"
-                            value={classlistValues.student_id || ""}
+                            value={classlistSearchValues.student_id || ""}
                             onChange={handleInputChange}
                         />
                     </Form.Group>
@@ -64,9 +71,17 @@ const ClasslistScreen = () => {
                     className="submitButton"
                     type="submit"
                     onClick={handleSearch}
+                    disabled={classlistSearchValues.course_name == ""}
                 >
                     Search
                 </Button>
+                {message && classlistValues.length == 0 && (
+                    <div className="message">
+                        <div className="alert alert-warning" role="alert">
+                            {message}
+                        </div>
+                    </div>
+                )}
             </div>
             <div className="outerDiv">
                 <Table striped bordered hover>
@@ -80,13 +95,21 @@ const ClasslistScreen = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>1</td>
-                        </tr>
+                        {classlistValues ? (
+                            classlistValues.map((data) => {
+                                return (
+                                    <tr key={data.student_id}>
+                                        <td>{data.course_id}</td>
+                                        <td>{data.student_id}</td>
+                                        <td>{data.section_no}</td>
+                                        <td>{data.first_name}</td>
+                                        <td>{data.last_name}</td>
+                                    </tr>
+                                );
+                            })
+                        ) : (
+                            <tr></tr>
+                        )}
                     </tbody>
                 </Table>
             </div>

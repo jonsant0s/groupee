@@ -11,9 +11,7 @@ export const search = (info: ClassListSearchInfo) => {
             },
         })
         .then((response) => {
-            // console.log(response.data);
-            // console.log(info.course_name, info.student_id);
-
+            console.log(response.data);
             return response.data;
         })
         .catch((err) => {
