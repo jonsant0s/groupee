@@ -2,24 +2,60 @@ import { Request, Response } from "express";
 import { database } from "../database";
 
 const fs = require("fs");
+const fastcsv = require("fast-csv");
 
 export async function initializeTables(req:Request, res: Response) {
     const db = await database();
     const tables = fs.readFileSync("./sql/database.sql").toString();
 
-    db.query("CREATE DATABASE IF NOT EXISTS `groupee`")
-        .then(() => {
-            console.log("Database 'groupee' created.");
-        })
-        .catch((error) => {
-            res.send(error);
-        });
-
+    await db.query("CREATE DATABASE IF NOT EXISTS `groupee`");
+    
     db.query(tables)
         .then(() => {
-            res.send("Tables created successfully.");
+            populateTables(req, res);
         })
-        .catch((error) => {
-            res.send(error);
+        .catch((err)=>{
+            res.send(err)
+        })
+}
+
+export function populateTables(req:Request, res: Response) {
+    const csvFiles = [
+    "account", 
+    "professor", 
+    "student",
+    "course",
+    "student_account",
+    "classlist"];
+
+    for(let table in csvFiles) {
+        csvFileStream(csvFiles[table]);
+    }
+    return res.status(200).send("Tables initialized");
+}
+
+const csvFileStream = async (table:string) => {
+    const db = await database();
+    
+    let accountsStream = fs.createReadStream(`./sql/${table}.csv`);
+    let csvData:any = [];
+
+    let csvStream = fastcsv
+        .parse()
+        .on("data", (data:any) => {
+            csvData.push(data);
+        })
+        .on("end", async () => {
+            const q = `INSERT INTO groupee.${table} (${csvData[0]}) VALUES ?`
+            csvData.shift();
+
+            db.query(q, [csvData])
+                .then(() => {
+                    return
+                }).catch((err) => {
+                    return err
+                })
         });
+    
+    accountsStream.pipe(csvStream);
 }
