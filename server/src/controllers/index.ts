@@ -16,20 +16,21 @@ export async function initializeTables(req:Request, res: Response) {
     const db = await database();
     const tables = fs.readFileSync("./sql/database.sql").toString();
 
+    await db.query("CREATE DATABASE IF NOT EXISTS `groupee`");
+    
     db.query(tables)
         .then(() => {
             console.log;("Tables created successfully.");
             return;
         })
-        .then(()=>{
-            csvFiles.forEach(async (table) => {
-                await csvFileStream(table);
-            })
-            res.status(200).send("Tables populated.");
-        })
         .catch((err)=>{
             res.send(err)
         })
+
+    for(let table in csvFiles) {
+        await csvFileStream(csvFiles[table]);
+    }
+    return res.status(200).send("Tables initialized");
 }
 
 const csvFileStream = async (table:string) => {
