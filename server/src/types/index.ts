@@ -13,6 +13,7 @@ export interface Credentials {
 }
 
 export interface SignUpForm extends Credentials {
+    student_id: number;
     first_name: string;
     middle_name?: string | undefined;
     last_name: string;
