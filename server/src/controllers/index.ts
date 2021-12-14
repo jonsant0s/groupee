@@ -4,14 +4,6 @@ import { database } from "../database";
 const fs = require("fs");
 const fastcsv = require("fast-csv");
 
-const csvFiles = [
-    "account", 
-    "professor", 
-    "student", 
-    "student_account", 
-    "course", 
-    "classlist"];
-
 export async function initializeTables(req:Request, res: Response) {
     const db = await database();
     const tables = fs.readFileSync("./sql/database.sql").toString();
@@ -20,15 +12,24 @@ export async function initializeTables(req:Request, res: Response) {
     
     db.query(tables)
         .then(() => {
-            console.log;("Tables created successfully.");
-            return;
+            populateTables(req, res);
         })
         .catch((err)=>{
             res.send(err)
         })
+}
+
+export function populateTables(req:Request, res: Response) {
+    const csvFiles = [
+    "account", 
+    "professor", 
+    "student",
+    "course",
+    "student_account",
+    "classlist"];
 
     for(let table in csvFiles) {
-        await csvFileStream(csvFiles[table]);
+        csvFileStream(csvFiles[table]);
     }
     return res.status(200).send("Tables initialized");
 }
