@@ -9,5 +9,8 @@ export async function database() {
         multipleStatements: true,
     });
 
+    await db.query("CREATE DATABASE IF NOT EXISTS `groupee`");
+    
     return db;
 }
+
