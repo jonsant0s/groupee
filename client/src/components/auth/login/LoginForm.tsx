@@ -34,8 +34,7 @@ export const LoginForm = () => {
 
             login(loginValues)
                 .then(() => {
-                    console.log(loginValues);
-                    navigate("/profile");
+                    navigate("/");
                     window.location.reload();
                 })
                 .catch((err) => {

@@ -6,13 +6,7 @@ export const login = (credentials : LoginInfo) => {
     return axios
         .post(API_URL + "authentication/login", credentials)
         .then((response) => {
-            console.log(response.data);
-            console.log(credentials.username, credentials.password);
-
-            if(response.data.accessToken) {
-                localStorage.setItem("user", JSON.stringify(response.data));
-            }
-
+            localStorage.setItem("user", JSON.stringify(response.data));
             return response.data;
         })
         .catch((err) => { return (err) });
@@ -25,6 +19,7 @@ export const logout = () => {
 export const register = (userInfo : SignUpInfo) => {
     return axios
         .post(API_URL + "authentication/signup", {
+            school_id: userInfo.school_id,
             username: userInfo.username,
             password: userInfo.password,
             first_name: userInfo.first_name,

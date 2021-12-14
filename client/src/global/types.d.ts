@@ -5,17 +5,18 @@ interface ClassListSearchInfo {
 
 interface LoginInfo {
     username: string,
-    password: string
+    password?: string
 }
 
 interface SignUpInfo extends LoginInfo {
+    school_id: number,
     first_name: string,
     last_name: string
 }
 
 interface UserInfo extends SignUpInfo {
-    roles: string,
-    session_token: string
+    session_token: string,
+    role: string
 }
 
 interface RequestInput {
@@ -69,6 +70,6 @@ interface Comment {
     request_id: number// FK
 }
 
-type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> 
 type FormEvent = React.FormEvent<EventTarget & HTMLButtonElement | HTMLFormElement>
 // Need role?
