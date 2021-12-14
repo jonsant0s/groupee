@@ -34,7 +34,7 @@ export const LoginForm = () => {
 
             login(loginValues)
                 .then(() => {
-                    navigate("/");
+                    navigate("/home");
                     window.location.reload();
                 })
                 .catch((err) => {
