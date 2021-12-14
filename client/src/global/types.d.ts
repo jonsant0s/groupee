@@ -9,7 +9,7 @@ interface LoginInfo {
 }
 
 interface SignUpInfo extends LoginInfo {
-    school_id: number,
+    student_id: number,
     first_name: string,
     last_name: string
 }

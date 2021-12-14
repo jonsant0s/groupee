@@ -12,7 +12,7 @@ export const SignUpForm = () => {
     const [validated, setValidated] = useState(false);
 
     const [registerValues, setRegister] = useState<SignUpInfo> ({
-        school_id: 0,
+        student_id: 0,
         first_name: "",
         last_name: "",
         username: "",
@@ -38,6 +38,7 @@ export const SignUpForm = () => {
             register(registerValues)
             .then(() => { 
                 navigate("/");
+                window.location.reload();
             })
             .catch((err) => {
                 console.log(err);
@@ -57,7 +58,24 @@ export const SignUpForm = () => {
                     validated={validated}
                     onSubmit={handleRegister}
                     className="form"
-                >
+                >   
+                    <Form.Group className="studentIDGroup">
+                        <div>
+                            <Form.Label className="idLabel">
+                                Student ID
+                            </Form.Label>
+                        </div>
+                        <Form.Control
+                            type="number"
+                            id="student_id"
+                            value={registerValues.student_id}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            Please enter school ID.
+                        </Form.Control.Feedback>
+                    </Form.Group>
                     <Form.Group className="firstNameGroup">
                         <div>
                             <Form.Label className="firstNameLabel">
