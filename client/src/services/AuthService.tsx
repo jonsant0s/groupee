@@ -20,10 +20,10 @@ export const register = (userInfo : SignUpInfo) => {
     return axios
         .post(API_URL + "authentication/signup", {
             school_id: userInfo.school_id,
-            username: userInfo.username,
-            password: userInfo.password,
             first_name: userInfo.first_name,
             last_name: userInfo.last_name,
+            username: userInfo.username,
+            password: userInfo.password
         })
         .then((response) => {
             console.log(response.data);

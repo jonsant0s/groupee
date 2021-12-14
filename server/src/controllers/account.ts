@@ -65,8 +65,11 @@ export async function signup(req: Request, res: Response) {
     const salt = await bcrypt.genSalt(8);
 
     var pass = bcrypt.hashSync(form.password, salt);
+    const studentInfo = await db.query(`SELECT * FROM groupee.student WHERE student_id=${form.student_id}`);
+    const student = Object(studentInfo[0])[0];
 
-    db.query(`
+    if (student){
+        db.query(`
         INSERT INTO groupee.account (username, password, first_name, middle_name, last_name)
         VALUES ("${form.username}", 
                 "${pass}", 
@@ -74,9 +77,23 @@ export async function signup(req: Request, res: Response) {
                 "${form.middle_name}", 
                 "${form.last_name}")`)
         .then(() => {
-            return res.status(200).send(`$Account created!`);
-        })
+            db.query(`
+            INSERT INTO groupee.student_account (username, student_id)
+            VALUES ("${form.username}", 
+                    ${student.student_id})`)
+            }).then(() => {
+                return res.status(200).send(`$Student account created!`);
+            }).catch((err) => {
+                return res.send(err);
+            })
         .catch((err) => {
-            return res.status(500).send(err);
+            return res.send(err);
         });
+    } else {
+        return res.send({message: `Student ID already exists`});
+    }
+
+
+
+    
 }

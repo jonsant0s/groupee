@@ -14,7 +14,7 @@ export const NavBar = () => {
         
         if (user) {
             setCurrentUser(user);
-            setShowUserBoard(user.role.includes("ROLE_User"));
+            //setShowUserBoard(user.role.includes("ROLE_User"));
         }
 
         EventBus.on("logout", logOut);
