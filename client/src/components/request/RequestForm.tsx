@@ -126,5 +126,5 @@ export const RequestForm:React.FC<FormInfo> = ({school_id, classes} : FormInfo) 
                 </Modal.Footer>
             </Modal>
         </>
-    )
-}
+    );
+};
