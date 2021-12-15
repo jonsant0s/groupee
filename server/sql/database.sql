@@ -77,11 +77,11 @@ CREATE TABLE IF NOT EXISTS `groupee`.`group` (
 
 
 CREATE TABLE IF NOT EXISTS `groupee`. `comments` (
-    `requester_id` INT(6),
+    `post_id` INT(6),
     `student_id` INT(6),
     `interested` INT(1),
     `content` VARCHAR(255),
     
     FOREIGN KEY (`student_id`) REFERENCES `groupee`.`student`(`student_id`),
-    FOREIGN KEY (`requester_id`) REFERENCES `groupee`. `group_request`(`requester_id`)
+    FOREIGN KEY (`post_id`) REFERENCES `groupee`. `group_request`(`request_id`)
 );
