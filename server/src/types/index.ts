@@ -1,10 +1,13 @@
 export * from "./api";
 
 export interface NewRequest {
-    id: number;
-    members: string;
-    availability: string | any;
-    size: number;
+    requestID: number,
+    student_id: number,
+    availability?: string
+    group_size: number,
+    class_id: number,
+    section: number,
+    comments?:string,
 }
 
 export interface Credentials {
@@ -22,7 +25,7 @@ export interface SignUpForm extends Credentials {
 export interface UserInfo {
     first_name: string;
     last_name: string;
-    school_id: number; // Either professor_id or student_id
+    school_id: number;
     username: string;
     session_token: string;
     role: string;

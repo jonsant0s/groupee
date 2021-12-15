@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import Form from "react-bootstrap/esm/Form";
 import { Days } from "../../global/days";
+import { RequestForm } from "components/request";
+import { getCurrentUser } from "../../services"
+
+import Form from "react-bootstrap/esm/Form";
 
 // Props be passed from parent or queried
 let posts:Posts[] = [
@@ -41,6 +44,7 @@ const mapToCheckbox = (options:any):CheckboxData[] => {
 }
 
 export const Forum = () => {
+    const [user, setUser] = useState<UserInfo>(getCurrentUser);
     const [filter, setFilter] = useState<FilterPost>({
         members: group_size,
         section: mapToCheckbox(forumData.sections),
@@ -51,7 +55,6 @@ export const Forum = () => {
        console.log(filter); 
     },[filter]);
 
-    // Get request?
     
     const handleInputChange = (e: ChangeEvent) => {
         e.persist();
@@ -103,11 +106,18 @@ export const Forum = () => {
     return (
         <div className="container-sm vh-100 p-2">
             <div className="row m-1 border-5 border-bottom px-2 mb-4">
-                <h1>{forumData.className} (Fall 2020)</h1>
-                <dl className="row">
-                    <dd className="col-sm-8">Group size: {forumData.group_size}</dd>
-                    <dd className="col-sm-8">Instructor: {forumData.instructor}</dd>
-                </dl>
+                <div className="d-flex justify-content-between">
+                    <div className="p-2 col-example text-left">
+                        <h1>{forumData.className} (Fall 2020)</h1>
+                        <dl className="row">
+                            <dd className="col-sm-8">Group size: {forumData.group_size}</dd>
+                            <dd className="col-sm-8">Instructor: {forumData.instructor}</dd>
+                        </dl>
+                    </div>
+                    <div className="pt-5 pr-3 text-left align-middle">
+                        <RequestForm school_id={user.school_id} classes={[]}/>
+                    </div>
+                </div>
             </div>
 
             <div className="row m-1">
@@ -125,7 +135,14 @@ export const Forum = () => {
                                 { sections.map((sec, i) => { return checkOptions("0", sec, i, "section") }) }
 
                             <h6 className="mt-3">Member slots: {filter.members}</h6>
-                                <Form.Range className="w-50" id="members" value={filter.members} min={1} max={group_size} onChange={handleInputChange}/>
+                                < Form.Range 
+                                    className="w-50"
+                                    id="members"
+                                    value={filter.members}
+                                    min={1}
+                                    max={group_size}
+                                    onChange={handleInputChange}
+                                />
 
                             <h6 className="mt-3">Availability:</h6>
                                 { Object.keys(Days).map((day, i) => { return checkOptions(null, day, i, "availability")}) }

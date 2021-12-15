@@ -14,18 +14,23 @@ interface SignUpInfo extends LoginInfo {
     last_name: string
 }
 
-interface UserInfo extends SignUpInfo {
+interface UserInfo {
+    username: string,
+    first_name: string,
+    last_name: string,
+    school_id: number,
     session_token: string,
     role: string
 }
 
 interface RequestInput {
+    requestID: number,
     student_id: number,
-    group_size: number,
-    status?: string,
-    class_id?: number,
-    requestID?: number, // PK
     availability?: Days
+    group_size: number,
+    class_id: number,
+    section: number,
+    comments?:string
 }
 
 interface ForumPosts extends RequestInput {
@@ -38,6 +43,11 @@ interface ForumPosts extends RequestInput {
 interface CheckboxData {
     value: number|Days,
     isChecked: boolean
+}
+
+interface AlertInfo {
+    status: number,
+    message: string
 }
 
 interface Posts {

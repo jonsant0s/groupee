@@ -1,86 +1,130 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Days } from "../../global/days";
+import axios from "axios";
 
-export const RequestForm = () => {
-    const [requestInfo, setRequestInfo] = useState<RequestInput>({
-        student_id: 0,
-        group_size: 0,
-    });
+import Modal from "react-bootstrap/esm/Modal";
+import Button from "react-bootstrap/esm/Button";
+import Alert from "react-bootstrap/esm/Alert";
 
-    useEffect(() => {
-        console.log(requestInfo);
-    });
+const randomIntFromInterval = () => {
+    let rand = Math.floor(Math.random() * (999 - 100+ 1) + 100);
+    let id = parseInt(""+800+rand);
+    
+    return id;
+}
+
+interface FormInfo {
+    school_id: number,
+    classes: []
+}
+
+export const RequestForm:React.FC<FormInfo> = ({school_id, classes} : FormInfo) => {
+    const [show, setShow] = useState(false);
+    const [alert, setAlert] = useState<AlertInfo>();
+
+    const initPost: RequestInput = {
+        requestID: randomIntFromInterval(),
+        student_id: school_id, // From userinfo
+        availability: Days.Monday,
+        group_size: 0, // input
+        class_id: 271, // from userinfo
+        section: 0, // from userinfo
+        comments:""
+    }
+    
+    const [requestInfo, setRequestInfo] = useState<RequestInput>(initPost);
+
+    const handleShow = () => setShow(!show);
 
     const handleInputChange = (e: ChangeEvent) => {
-        console.log(e.target.id);
-
         e.persist();
-        let prev = { ...requestInfo };
+        let prev = {...requestInfo};
         prev[e.target.id] = e.target.value;
-
+        
         setRequestInfo(prev);
     };
 
-    const onSubmit = (e: FormEvent) => {
-        e.preventDefault();
-        console.log(e);
-        // axios
-        //     .post("https://jsonplaceholder.typicode.com/posts", requestInfo)
-        //     .then((res) => console.log(res.data));
+    const onSubmit = () => {
+        axios
+            .post("http://localhost:3001/requests/create", requestInfo)
+            .then((res) => {
+                setAlert({
+                    status: res.data.status,
+                    message: res.data.message
+                });
+                setRequestInfo(initPost);
+            })
+            .catch((err) => {
+                setAlert({
+                    status: err.data.status,
+                    message: err.data.message
+                });
+            });
     };
 
     return (
-        <div className="container-sm p-5">
-            <h3 className="mb-4 text-center">Create Group Request</h3>
-            <form
-                className="w-75 row mx-auto p-3 border rounded"
-                onSubmit={onSubmit}
-            >
-                <div className="col-md-6">
-                    <div className="col-md-12">
-                        <label className="form-label">Student ID</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="student_id"
-                            name="student_id"
-                            value={requestInfo.student_id || ""}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="col-md-12">
-                        <label className="form-label">Group Size</label>
-                        <input
-                            type="number"
-                            className="form-control"
-                            id="group_size"
-                            name="group_size"
-                            value={requestInfo.group_size || ""}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="col-md-12">
-                        <label className="form-label">Availability</label>
-                        <select
-                            id="availability"
-                            className="form-select"
-                            name="availability"
-                            value={requestInfo.availability || ""}
-                            onChange={handleInputChange}
-                        >
-                            {Object.keys(Days).map((day) => {
-                                return <option>{day}</option>;
-                            })}
-                        </select>
-                    </div>
-                </div>
+        <>
+            <Button variant="primary" onClick={handleShow}>
+                Look for group/members
+            </Button>
+            <Modal show={show} onHide={handleShow}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Group preference</Modal.Title>
+                </Modal.Header>
 
-                <div className="col-12 mt-3">
-                    <button type="submit" className="btn btn-primary">
-                        Submit request
-                    </button>
-                </div>
-            </form>
-        </div>
-    );
-};
+                <Modal.Body>
+                    <form
+                        className="w-75 row mx-auto p-3"
+                        onSubmit={onSubmit}
+                    >
+                        { alert && 
+                            <Alert variant={alert.status==200 ? "success":"danger"}>
+                                { alert.message }
+                            </Alert> 
+                        }
+
+                        <h6>----ADD CLASSNAME POST SHOULD BE FOR</h6>
+
+                        <label className="form-label"> Number of members you are looking for </label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                id="group_size"
+                                name="group_size"
+                                value={requestInfo.group_size || ""}
+                                onChange={handleInputChange}
+                            />
+            
+                        <label className="form-label mt-3">Availability</label>
+                            <select
+                                id="availability"
+                                className="form-select"
+                                name="availability"
+                                value={requestInfo.availability || ""}
+                                onChange={handleInputChange}
+                            >
+                                { Object.keys(Days).map((day) => {
+                                    return <option>{day}</option>;
+                                }) }
+                            </select>
+                        
+                        <label className="form-label mt-3">Additional preferences:</label>
+                            <textarea 
+                                className="form-control" 
+                                value={requestInfo.comments || ""} 
+                                id="comments" 
+                                onChange={handleInputChange}
+                                rows={3}
+                            />
+                    </form>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="primary" onClick={onSubmit}>
+                        Submit
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}
