@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import { login } from "../../../services/";
+import { getCurrentUser, login } from "../../../services/";
 
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 
 import "./LoginForm.css";
+import { fetchStudentClasses } from "components/home/HomeScreenHelpers";
 
 export const LoginForm = () => {
     const navigate = useNavigate();
@@ -33,7 +34,8 @@ export const LoginForm = () => {
             e.preventDefault();
 
             login(loginValues)
-                .then(() => {
+                .then((user) => {
+                    fetchStudentClasses(user.school_id);
                     navigate("/home");
                     window.location.reload();
                 })

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import Table from "react-bootstrap/esm/Table";
@@ -8,18 +8,30 @@ import { search } from "./ClassListScreenHelpers";
 const ClasslistScreen = () => {
     const [message, setMessage] = useState("");
     const [classlistValues, setclasslistValues] = useState<any>();
-    const [classlistSearchValues, setclasslistSearchValues] =
+    const [classlistSearchValues, setClasslistSearchValues] =
         useState<ClassListSearchInfo>({
             course_name: "",
             student_id: null,
         });
+
+    useEffect(() => {
+        let search = window.location.search;
+        let params = new URLSearchParams(search);
+        let courseName = params.get("course_name");
+
+        if (courseName) {
+            let prev = { ...classlistSearchValues };
+            prev.course_name = courseName;
+            setClasslistSearchValues(prev);
+        }
+    }, []);
 
     const handleInputChange = (e: ChangeEvent) => {
         e.persist();
         let prev = { ...classlistSearchValues };
         prev[e.target.id] = e.target.value;
 
-        setclasslistSearchValues(prev);
+        setClasslistSearchValues(prev);
     };
 
     const handleSearch = (e: FormEvent) => {
