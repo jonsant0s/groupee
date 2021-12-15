@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { database } from "../database";
-import { Credentials, NewRequest } from "../types";
+import { NewRequest, Credentials } from "../types";
 
 export async function getGroupRequests(req: Request, res: Response) {
     const db = await database();
@@ -16,7 +16,7 @@ export async function getGroupRequests(req: Request, res: Response) {
     );
 
     const data = Object(id[0])[0];
-    
+
     if (data) {
         const result = await db.query(
             `SELECT * FROM groupee.group_request
@@ -49,23 +49,29 @@ export async function createGroupRequest(req: Request, res: Response) {
     const pref: NewRequest = req.body;
 
     db.query(`
-        INSERT INTO groupee.group_request (requester_id, requested_members, availability, size)
-        VALUES ("${pref.id}", 
-                "${pref.members}", 
+        INSERT INTO groupee.group_request (request_id, poster_id, availability, size, course_id, section, comments)
+        VALUES (${pref.requestID}, 
+                ${pref.student_id}, 
                 "${pref.availability}", 
-                "${pref.size}")`
-    )
+                ${pref.group_size},
+                ${pref.class_id},
+                ${pref.section},
+                "${pref.comments}")`
+        )
         .then(() => {
-            return res.send(
-                `Submitted group creation request with members: ${pref.members}.`
-            );
+            return db.query(`SELECT course_name FROM groupee.course WHERE course_id=${pref.class_id}`);
         })
-        .catch((err) => {
-            return res.send(`You have an existing request under review.`);
+        .then((courseN) => {
+            const course = Object(courseN[0])[0];
+            return res.json({
+                status:200,
+                message: `Created group preference post #${pref.requestID} for ${course.course_name}.`
+            });
+        })
+        .catch(() => {
+            return res.json({
+                status:400,
+                message: `Failed to post new preference (#${pref.requestID}) for Course ID: ${pref.class_id}.`
+            });
         });
-
-    // Only students can create requests
-    // May give student a warning if student ID they enter does not exist in database
 }
-
-// Export modules at end

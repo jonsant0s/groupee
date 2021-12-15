@@ -53,12 +53,17 @@ CREATE TABLE IF NOT EXISTS `groupee`. `classlist` (
 );
 
 CREATE TABLE IF NOT EXISTS `groupee`. `group_request` (
-    `requester_id` INT(6) UNIQUE,
+    `request_id` INT(6) UNIQUE,
+    `poster_id` INT(6),
     `availability` VARCHAR(54) NOT NULL,
-    `status` VARCHAR(54) DEFAULT 'Pending',
     `size` INT NOT NULL,
-
-    FOREIGN KEY (`requester_id`) REFERENCES `groupee`.`student`(`student_id`)
+    `course_id` INT(6) NOT NULL,
+    `section` INT(2) NOT NULL,
+    `comments` VARCHAR(255),
+    
+    PRIMARY KEY (`request_id`),
+    FOREIGN KEY (`course_id`) REFERENCES `groupee`.`course`(`course_id`),
+    FOREIGN KEY (`poster_id`) REFERENCES `groupee`.`student`(`student_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `groupee`.`group` (
@@ -72,11 +77,11 @@ CREATE TABLE IF NOT EXISTS `groupee`.`group` (
 
 
 CREATE TABLE IF NOT EXISTS `groupee`. `comments` (
-    `requester_id` INT(6),
+    `post_id` INT(6),
     `student_id` INT(6),
     `interested` INT(1),
     `content` VARCHAR(255),
     
     FOREIGN KEY (`student_id`) REFERENCES `groupee`.`student`(`student_id`),
-    FOREIGN KEY (`requester_id`) REFERENCES `groupee`. `group_request`(`requester_id`)
+    FOREIGN KEY (`post_id`) REFERENCES `groupee`. `group_request`(`request_id`)
 );
