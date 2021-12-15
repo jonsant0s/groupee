@@ -35,13 +35,3 @@ export async function searchStudent (req: Request | any, res: Response) {
         });
 
 }
-
-// SELECT *
-//         FROM groupee.course AS C
-//         INNER JOIN groupee.classlist AS L
-//             ON C.course_id=L.course_id
-//         INNER JOIN ( 
-//         SELECT student_id
-//         FROM groupee.student 
-//         WHERE student_id=${student_id} ) AS S
-//          ON S.student_id=L.student_id
