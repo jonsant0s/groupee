@@ -5,7 +5,6 @@ import { getCurrentUser, getUserClasses } from "../../services";
 import Button from "react-bootstrap/esm/Button";
 import "./HomeScreen.css";
 import { fetchStudentClasses } from "./HomeScreenHelpers";
-import { countReset } from "console";
 
 export const HomeScreen = () => {
     const [user, setUser] = useState(getCurrentUser);
