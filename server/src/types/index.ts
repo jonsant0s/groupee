@@ -2,12 +2,12 @@ export * from "./api";
 
 export interface NewRequest {
     requestID: number,
+    courseName:string,
     student_id: number,
     availability?: string
     group_size: number,
-    class_id: number,
     section: number,
-    comments?:string,
+    comments?:string
 }
 
 export interface Credentials {

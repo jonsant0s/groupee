@@ -62,7 +62,7 @@ export const HomeScreen = () => {
                     <div className="col-md-12 border p-2">
                         <div className="d-grid gap-2">
                             <Button
-                                href="/requestform"
+                                href="/forum"
                                 variant="primary"
                                 size="lg"
                             >
