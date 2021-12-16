@@ -7,6 +7,7 @@ export async function database() {
         user: "root",
         password: "password",
         multipleStatements: true,
+        connectionLimit: 10
     });
     
     return db;

@@ -1,46 +1,56 @@
 import { Request, Response } from "express";
 import { database } from "../database";
-import { NewRequest, Credentials } from "../types";
+import { NewRequest } from "../types";
+
+export async function deleteGroupPreference(req: Request, res: Response) {
+    const db = await database();
+    const { request_id } = req.body;
+
+    db.query (
+        `DELETE FROM groupee.group_request
+         WHERE request_id=${request_id}`
+    )
+    .then(() => {
+        return res.json({
+            status:200,
+            message: `Deleted preference post #${request_id}.`
+        });
+    })
+    .catch(() => {
+        return res.json({
+            status:400,
+            message: `Failed delete preference #${request_id}.`
+        });
+    });
+}
 
 export async function getGroupRequests(req: Request, res: Response) {
     const db = await database();
-    const { username }: Credentials = req.body;
+    const { school_id } = req.query;
 
-    const id = await db.query(
-        `SELECT S.student_id
-         FROM groupee.student S, groupee.account A, groupee.student_account B
-         WHERE 
-            A.username=B.username AND 
-            A.username="${username}" AND 
-            S.student_id=B.student_id`
+    const id = await db.query (
+        `SELECT DISTINCT R.*, A.username, C.course_name
+         FROM groupee.group_request AS R
+         JOIN ( SELECT X.course_id, X.course_name, S.student_id
+                FROM groupee.course AS X
+                JOIN groupee.classlist AS L
+                    ON X.course_id=L.course_id
+                JOIN ( 
+                    SELECT student_id
+                    FROM groupee.student 
+                    WHERE student_id=${school_id} ) AS S
+                ON S.student_id=L.student_id ) AS C
+            ON C.course_id=R.course_id
+         JOIN groupee.student_account AS A
+            ON A.student_id=R.poster_id`
     );
 
-    const data = Object(id[0])[0];
+    const data = Object(id[0]);
 
     if (data) {
-        const result = await db.query(
-            `SELECT * FROM groupee.group_request
-             WHERE requester_id="${data.student_id}"`
-        );
-
-        return res.json(result[0]);
-
+        return res.send(data);
     } else {
-        const pid = await db.query(
-            `SELECT id FROM groupee.professor
-             WHERE username="${username}"`
-        );
-
-        const pdata = Object(pid[0])[0];
-
-        if (pdata) {
-            const result = await db.query(`SELECT * FROM groupee.group_request`);
-            return res.json(result[0]);
-        } else {
-            return res.json({
-                message: `You have not submitted any group requests.`,
-            });
-        }
+        return res.send(`Failed to retrieve group requests.`);
     }
 }
 
@@ -49,29 +59,32 @@ export async function createGroupRequest(req: Request, res: Response) {
     const pref: NewRequest = req.body;
 
     db.query(`
-        INSERT INTO groupee.group_request (request_id, poster_id, availability, size, course_id, section, comments)
-        VALUES (${pref.requestID}, 
-                ${pref.student_id}, 
-                "${pref.availability}", 
-                ${pref.group_size},
-                ${pref.class_id},
-                ${pref.section},
-                "${pref.comments}")`
-        )
-        .then(() => {
-            return db.query(`SELECT course_name FROM groupee.course WHERE course_id=${pref.class_id}`);
-        })
-        .then((courseN) => {
-            const course = Object(courseN[0])[0];
-            return res.json({
-                status:200,
-                message: `Created group preference post #${pref.requestID} for ${course.course_name}.`
-            });
-        })
-        .catch(() => {
-            return res.json({
-                status:400,
-                message: `Failed to post new preference (#${pref.requestID}) for Course ID: ${pref.class_id}.`
-            });
+        SELECT course_id
+        FROM groupee.course
+        WHERE course_name="${pref.courseName}"`)
+    .then((result) => {
+        const course = Object(result[0])[0];
+        
+        return db.query(`
+            INSERT IGNORE INTO groupee.group_request (request_id, poster_id, availability, size, course_id, section, comments)
+            VALUES (${pref.requestID}, 
+                    ${pref.student_id}, 
+                    "${pref.availability}", 
+                    ${pref.group_size},
+                    ${course.course_id},
+                    ${pref.section},
+                    "${pref.comments}")`)
+    })
+    .then(() => {
+        return res.json({
+            status:200,
+            message: `Created group preference post #${pref.requestID} for ${pref.courseName}.`
         });
+    })
+    .catch((err) => {
+        return res.json({
+            status:400,
+            message: `Failed to post new preference (#${pref.requestID}) for ${pref.courseName}.`
+        });
+    })
 }

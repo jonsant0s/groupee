@@ -25,10 +25,10 @@ interface UserInfo {
 
 interface RequestInput {
     requestID: number,
+    courseName: string,
     student_id: number,
     availability?: Days
     group_size: number,
-    class_id: number,
     section: number,
     comments?:string
 }
@@ -41,8 +41,7 @@ interface ForumPosts extends RequestInput {
 }
 
 interface CheckboxData {
-    value: number|Days,
-    isChecked: boolean
+    [key: string|Days]: boolean
 }
 
 interface AlertInfo {
@@ -51,13 +50,15 @@ interface AlertInfo {
 }
 
 interface Posts {
-    poster: string,
-    req_id: number,
-    title:string,
+    request_id: number,
+    poster_id: number,
+    username: string,
+    availability: Days,
+    size: number,
+    course_id: number,
     section: number,
-    content: string,
-    members: number,
-    availability: Days
+    comments: string,
+    course_name: string
 }
 
 interface ForumData {
@@ -69,9 +70,10 @@ interface ForumData {
 }
 
 interface FilterPost {
+    courses:CheckboxData,
     members: number,
-    section?: CheckboxData[],
-    availability?: CheckboxData[]
+    section: CheckboxData,
+    availability: CheckboxData
 }
 
 interface Comment {

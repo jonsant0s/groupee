@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { Days } from "../../global/days";
 import axios from "axios";
 
@@ -14,25 +14,30 @@ const randomIntFromInterval = () => {
 }
 
 interface FormInfo {
+    userClasses:any,
     school_id: number,
-    classes: []
+    addRequest: () => void;
 }
 
-export const RequestForm:React.FC<FormInfo> = ({school_id, classes} : FormInfo) => {
+export const RequestForm:React.FC<FormInfo> = ({userClasses, school_id, addRequest} : FormInfo) => {
     const [show, setShow] = useState(false);
     const [alert, setAlert] = useState<AlertInfo>();
-
+    
     const initPost: RequestInput = {
         requestID: randomIntFromInterval(),
-        student_id: school_id, // From userinfo
+        courseName: userClasses[0].course_name,
+        student_id: school_id,
         availability: Days.Monday,
-        group_size: 0, // input
-        class_id: 271, // from userinfo
-        section: 0, // from userinfo
+        group_size: 0,
+        section: userClasses[0].section_no,
         comments:""
     }
-    
+
     const [requestInfo, setRequestInfo] = useState<RequestInput>(initPost);
+
+    useEffect(() => {
+        console.log(requestInfo);
+    }, [requestInfo]);
 
     const handleShow = () => setShow(!show);
 
@@ -40,7 +45,15 @@ export const RequestForm:React.FC<FormInfo> = ({school_id, classes} : FormInfo) 
         e.persist();
         let prev = {...requestInfo};
         prev[e.target.id] = e.target.value;
-        
+
+        if(e.target.id==="courseName") {
+            const filtered = userClasses
+                .filter((course) => {
+                    return course.course_name===e.target.value
+                });
+
+            prev.section=filtered[0].section_no;
+        }
         setRequestInfo(prev);
     };
 
@@ -53,6 +66,7 @@ export const RequestForm:React.FC<FormInfo> = ({school_id, classes} : FormInfo) 
                     message: res.data.message
                 });
                 setRequestInfo(initPost);
+                addRequest();
             })
             .catch((err) => {
                 setAlert({
@@ -65,7 +79,7 @@ export const RequestForm:React.FC<FormInfo> = ({school_id, classes} : FormInfo) 
     return (
         <>
             <Button variant="primary" onClick={handleShow}>
-                Look for group/members
+                Post new group preference
             </Button>
             <Modal show={show} onHide={handleShow}>
                 <Modal.Header closeButton>
@@ -83,9 +97,19 @@ export const RequestForm:React.FC<FormInfo> = ({school_id, classes} : FormInfo) 
                             </Alert> 
                         }
 
-                        <h6>----ADD CLASSNAME POST SHOULD BE FOR</h6>
+                        <label className="form-label mt-3">Course</label>
+                            <select
+                                id="courseName"
+                                className="form-select"
+                                value={requestInfo.courseName}
+                                onChange={handleInputChange}
+                            >
+                                { userClasses.map((course, i) => {
+                                    return <option key={`c${course.course_name}`}>{course.course_name}</option>;
+                                }) }
+                            </select>
 
-                        <label className="form-label"> Number of members you are looking for </label>
+                        <label className="form-label mt-3"> Number of members you are looking for </label>
                             <input
                                 type="number"
                                 className="form-control"
@@ -104,7 +128,7 @@ export const RequestForm:React.FC<FormInfo> = ({school_id, classes} : FormInfo) 
                                 onChange={handleInputChange}
                             >
                                 { Object.keys(Days).map((day) => {
-                                    return <option>{day}</option>;
+                                    return <option key={`d${day}`}>{day}</option>;
                                 }) }
                             </select>
                         
