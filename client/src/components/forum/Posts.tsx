@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Comments } from "./Comments";
 
 import Alert from "react-bootstrap/esm/Alert";
 import CloseButton from "react-bootstrap/esm/CloseButton";
@@ -8,10 +9,10 @@ import axios from "axios";
 interface PostProp {
     post:Posts,
     group_size: number,
-    school_id:number
+    user:UserInfo
 }
 
-export const Posts:React.FC<PostProp> = ({post, group_size, school_id}) => {
+export const Posts:React.FC<PostProp> = ({post, group_size, user}) => {
     const [alert, setAlert] = useState<AlertInfo | null>(null);
 
     const handleDeletePost = async() => {
@@ -34,8 +35,7 @@ export const Posts:React.FC<PostProp> = ({post, group_size, school_id}) => {
                 :
 
                     <>
-                        <h5> { post.course_name }: Section 0{ post.section }</h5>
-                        <h6>Availability: { post.availability }</h6>
+                        <Comments post={post} user={user} />
                         <div className="row">
                             <div className="col-md-9 px-3 pb-3">
                                 { post.comments }
@@ -49,7 +49,7 @@ export const Posts:React.FC<PostProp> = ({post, group_size, school_id}) => {
                             </div>
 
                             <div className="col-md-1 pb-3">
-                                { school_id===post.poster_id && 
+                                { user.school_id===post.poster_id && 
                                     <CloseButton onClick={handleDeletePost}/> 
                                 }
                             </div>

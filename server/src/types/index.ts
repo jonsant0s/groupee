@@ -40,3 +40,17 @@ export interface ClassList {
     course_name: string;
     student_id: number | null;
 }
+
+export interface CommentInfo {
+    post_id: number,
+    commenter_id: number,
+    content: string,
+    time_stamp: string
+}
+
+export interface JoinRequest {
+    post_id: number,
+    student_id: number,
+    join: boolean,
+    status: string
+}

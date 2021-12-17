@@ -7,6 +7,8 @@ import AccountRequest from "./routes/account";
 import GroupRequests from "./routes/groupRequests";
 import RoleRoutes from "./routes/role";
 import SearchClassList from "./routes/classlist";
+import PostComment from "./routes/comment";
+import JoinRequests from "./routes/joinRequest";
 
 import { header } from "./middleware/account";
 
@@ -43,6 +45,8 @@ export class App {
         this.app.use("/requests", GroupRequests);
         this.app.use("/role", RoleRoutes);
         this.app.use("/classlist", SearchClassList);
+        this.app.use("/comment", PostComment);
+        this.app.use("/join", JoinRequests);
     }
 
     async listen() {

@@ -110,7 +110,7 @@ export const Forum = () => {
                                         key={post.request_id}
                                         post={post} 
                                         group_size={group_size}
-                                        school_id={user.school_id}
+                                        user={user}
                                     /> 
                                 )
                             })

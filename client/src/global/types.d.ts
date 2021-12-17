@@ -76,10 +76,21 @@ interface FilterPost {
     availability: CheckboxData
 }
 
-interface Comment {
-    userID: string,
+interface UserComment {
+    post_id: number,
+    commenter_id: number,
     content: string,
-    request_id: number// FK
+    status: string
+}
+
+interface PostComment {
+    commenter_id: number,
+    content: string,
+    join_group: boolean,
+    post_id: number,
+    status: string,
+    time_stamp: string,
+    username: string
 }
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> 

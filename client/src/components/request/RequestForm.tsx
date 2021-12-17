@@ -19,7 +19,7 @@ interface FormInfo {
     addRequest: () => void;
 }
 
-export const RequestForm:React.FC<FormInfo> = ({userClasses, school_id, addRequest} : FormInfo) => {
+export const RequestForm:React.FC<FormInfo> = ({ userClasses, school_id, addRequest }) => {
     const [show, setShow] = useState(false);
     const [alert, setAlert] = useState<AlertInfo>();
     
