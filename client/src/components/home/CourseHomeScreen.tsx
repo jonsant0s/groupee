@@ -8,7 +8,7 @@ import Button from "react-bootstrap/esm/Button";
 import "./HomeScreen.css";
 import { fetchStudentClasses } from "./HomeScreenHelpers";
 
-export const HomeScreen = () => {
+export const CourseHomeScreen = () => {
     const [user, setUser] = useState(getCurrentUser);
     const [userClasses, setUserClasses] = useState(getUserClasses);
 
@@ -42,30 +42,6 @@ export const HomeScreen = () => {
                 <NavBarHome/>
                 <div className="col-md-12 border-3 border-bottom"/>
 
-                <div className="col-md-4 p-2">
-                    <div className="d-flex flex-column border p-3">
-                        <h6>Enrolled in:</h6>
-                        {userClasses ? (
-                            userClasses.map((data) => {
-                                return (
-                                    <div
-                                        className="p-2 border-bottom"
-                                        key={data.course_id}
-                                    >
-                                        <NavLink
-                                            className="nav-link"
-                                            to={`/coursehome?course_name=${data.course_name}`}
-                                        >
-                                            {data.course_name}
-                                        </NavLink>
-                                    </div>
-                                );
-                            })
-                        ) : (
-                            <div></div>
-                        )}
-                    </div>
-                </div>
 
                 <div className="col-md-8 p-2">
                     <div className="col-md-12 border p-5 text-center">

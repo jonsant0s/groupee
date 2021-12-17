@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import { HomeScreen } from "./components/home";
+import { HomeScreen, CourseHomeScreen } from "./components/home";
 import { RequestList } from "./components/request";
 import { LoginForm, SignUpForm } from "./components/auth";
 import { NavBar } from "./components/navigation/NavBar";
@@ -50,6 +50,14 @@ const App = () => {
                 />
                 <Route path="/login" element={<LoginForm />} />
                 <Route path="/signup" element={<SignUpForm />} />
+                <Route
+                    path="/coursehome"
+                    element={
+                        <AuthRequired setShow={setShow}>
+                            <CourseHomeScreen />
+                        </AuthRequired>
+                    }
+                />
                 <Route
                     path="/home"
                     element={
