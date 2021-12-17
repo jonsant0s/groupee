@@ -18,6 +18,12 @@ export const HomeScreen = () => {
     var firstLetter = user.first_name.charAt(0);
     var lastLetter = user.last_name.charAt(0);
 
+    var department;
+    if (user.role == 'Professor'){
+        department = "Department:";
+    } else {
+        department = "Major:"
+    }
     return (
         <div className="p-3">
             <div className="row px-3">
@@ -32,7 +38,7 @@ export const HomeScreen = () => {
                     <p>
                         Role: {user.role} <br />
                         Student ID: {user.school_id} <br />
-                        Major: CS
+                        {department} CS
                     </p>
                 </div>
 
