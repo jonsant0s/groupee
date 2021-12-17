@@ -46,9 +46,16 @@ const App = () => {
 						)
 					}
 				/>
-				<Route path="/home" element={<HomeScreen />} />
 				<Route path="/login" element={<LoginForm />} />
 				<Route path="/signup" element={<SignUpForm />} />
+				<Route
+					path="/home"
+					element={
+						<AuthRequired setShow={setShow}>
+							<HomeScreen />
+						</AuthRequired>
+					}
+				/>
 				<Route
 					path="/requestlist"
 					element={
