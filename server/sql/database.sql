@@ -75,13 +75,23 @@ CREATE TABLE IF NOT EXISTS `groupee`.`group` (
     PRIMARY KEY (`group_no`)
 );
 
+CREATE TABLE IF NOT EXISTS `groupee`. `comment` (
+    `post_id` INT(6),
+    `commenter_id` INT(6),
+    `content` VARCHAR(255) DEFAULT NULL,
+    `time_stamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-CREATE TABLE IF NOT EXISTS `groupee`. `comments` (
+    FOREIGN KEY (`post_id`) REFERENCES `groupee`. `group_request`(`request_id`),
+    FOREIGN KEY (`commenter_id`) REFERENCES `groupee`.`student`(`student_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `groupee`.`join_request` (
     `post_id` INT(6),
     `student_id` INT(6),
-    `interested` INT(1),
-    `content` VARCHAR(255),
+    `join_group` TINYINT(1) DEFAULT 0,
+    `conflict` TINYINT(1) DEFAULT 0,
+    `status` VARCHAR(20) DEFAULT 'pending',
     
-    FOREIGN KEY (`student_id`) REFERENCES `groupee`.`student`(`student_id`),
-    FOREIGN KEY (`post_id`) REFERENCES `groupee`. `group_request`(`request_id`)
+    FOREIGN KEY (`post_id`) REFERENCES `groupee`. `group_request`(`request_id`),
+    FOREIGN KEY (`student_id`) REFERENCES `groupee`.`student`(`student_id`)
 );

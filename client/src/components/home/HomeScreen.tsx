@@ -12,9 +12,9 @@ export const HomeScreen = () => {
     const [userClasses, setUserClasses] = useState(getUserClasses);
 
     useEffect(() => {
-        console.log(user);
-        console.log(userClasses);
+        fetchStudentClasses(user.school_id);
     }, [user]);
+    
     var firstLetter = user.first_name.charAt(0);
     var lastLetter = user.last_name.charAt(0);
 

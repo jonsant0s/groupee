@@ -2,6 +2,48 @@ import { Request, Response } from "express";
 import { database } from "../database";
 import { NewRequest } from "../types";
 
+// Posting should update everytime new student joins
+export async function updateMemberCount(req: Request, res: Response) {
+    const db = await database();
+    const { post_id, member_count } = req.query;
+
+    db.query(`
+        UPDATE groupee.group_request
+        SET size=${member_count}
+        WHERE post_id=${post_id}`
+    )
+    .then(() => {
+        return res.json({
+            status:200,
+            message: `Added new member to group request.`
+        });
+    })
+    .catch((err) => {
+        return res.send(err);
+    })
+}
+
+// In home, gets all the group requests the user has posted
+export async function getGroupPreferencePost(req: Request, res: Response) {
+    const db = await database();
+    const { school_id } = req.query;
+
+    db.query (
+        `SELECT *
+         FROM groupee.group_request
+         WHERE poster_id=${school_id}`
+    ).then((data) => {
+        return res.send(data);
+    })
+    .catch(() => {
+        return res.json({
+            status:400,
+            message: `Failed to retrieve posts.`
+        });
+    });
+}
+
+// Delete posting from forum
 export async function deleteGroupPreference(req: Request, res: Response) {
     const db = await database();
     const { request_id } = req.body;
@@ -24,6 +66,7 @@ export async function deleteGroupPreference(req: Request, res: Response) {
     });
 }
 
+// Gets all posts on forum depending on classes student is enrolled in
 export async function getGroupRequests(req: Request, res: Response) {
     const db = await database();
     const { school_id } = req.query;
@@ -54,6 +97,7 @@ export async function getGroupRequests(req: Request, res: Response) {
     }
 }
 
+// Posts new group request on forum
 export async function createGroupRequest(req: Request, res: Response) {
     const db = await database();
     const pref: NewRequest = req.body;
