@@ -15,75 +15,93 @@ import "./App.css";
 import axios from "axios";
 
 import { getCurrentUser } from "services";
+import { ProfessorGroupDetailsScreen } from "components/home/ProfessorGroupDetailsScreen";
+import { StudentGroupDetailsScreen } from "components/home/StudentGroupDetailsScreen";
 
 const App = () => {
-	const user = getCurrentUser();
-	const [show, setShow] = useState<boolean>(false);
+    const user = getCurrentUser();
+    const [show, setShow] = useState<boolean>(false);
 
-	useEffect(() => {
-		axios
-			.get("http://localhost:3001/")
-			.then(() => {
-				return axios.get("http://localhost:3001/populate");
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}, []);
+    useEffect(() => {
+        axios
+            .get("http://localhost:3001/")
+            .then(() => {
+                return axios.get("http://localhost:3001/populate");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
 
-	return (
-		<div className="App">
-			<NavBar />
-			{ show && <CustomAlert setShow={setShow} /> }
-			<Routes>
-				<Route
-					path="/"
-					element={
-						user ? (
+    return (
+        <div className="App">
+            <NavBar />
+            {show && <CustomAlert setShow={setShow} />}
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        user ? (
                             <Navigate replace to="/home" />
-						) : (
+                        ) : (
                             <Navigate replace to="/login" />
-						)
-					}
-				/>
-				<Route path="/login" element={<LoginForm />} />
-				<Route path="/signup" element={<SignUpForm />} />
-				<Route
-					path="/home"
-					element={
-						<AuthRequired setShow={setShow}>
-							<HomeScreen />
-						</AuthRequired>
-					}
-				/>
-				<Route
-					path="/requestlist"
-					element={
-						<AuthRequired setShow={setShow}>
-							<RequestList />
-						</AuthRequired>
-					}
-				/>
+                        )
+                    }
+                />
+                <Route path="/login" element={<LoginForm />} />
+                <Route path="/signup" element={<SignUpForm />} />
+                <Route
+                    path="/home"
+                    element={
+                        <AuthRequired setShow={setShow}>
+                            <HomeScreen />
+                        </AuthRequired>
+                    }
+                />
+                <Route
+                    path="/requestlist"
+                    element={
+                        <AuthRequired setShow={setShow}>
+                            <RequestList />
+                        </AuthRequired>
+                    }
+                />
 
-				<Route
-					path="/classlist"
-					element={
-						<AuthRequired setShow={setShow}>
-							<ClasslistScreen />
-						</AuthRequired>
-					}
-				/>
-				<Route
-					path="/forum"
-					element={
-						<AuthRequired setShow={setShow}>
-							<Forum />
-						</AuthRequired>
-					}
-				/>
-			</Routes>
-		</div>
-	);
+                <Route
+                    path="/classlist"
+                    element={
+                        <AuthRequired setShow={setShow}>
+                            <ClasslistScreen />
+                        </AuthRequired>
+                    }
+                />
+                <Route
+                    path="/forum"
+                    element={
+                        <AuthRequired setShow={setShow}>
+                            <Forum />
+                        </AuthRequired>
+                    }
+                />
+                <Route
+                    path="/professorGroupDetails"
+                    element={
+                        <AuthRequired setShow={setShow}>
+                            <ProfessorGroupDetailsScreen />
+                        </AuthRequired>
+                    }
+                />
+                <Route
+                    path="/studentGroupDetails"
+                    element={
+                        <AuthRequired setShow={setShow}>
+                            <StudentGroupDetailsScreen />
+                        </AuthRequired>
+                    }
+                />
+            </Routes>
+        </div>
+    );
 };
 
 export default App;
