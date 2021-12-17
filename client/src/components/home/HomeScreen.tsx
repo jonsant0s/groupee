@@ -14,11 +14,16 @@ export const HomeScreen = () => {
         console.log(user);
         console.log(userClasses);
     }, [user]);
+    var firstLetter = user.first_name.charAt(0);
+    var lastLetter = user.last_name.charAt(0);
 
     return (
         <div className="p-3">
             <div className="row px-3">
-                <div className="col-md-1 border border-5 rounded-circle mb-3"></div>
+                <div className="col-md-1 border border-5 rounded-circle mb-3">
+                    <p className="profileContainer">{firstLetter} {lastLetter}</p>
+                    
+                </div>
                 <div className="col-md-11 border-3 border-bottom py-3 mb-3">
                     <h5>
                         {user.first_name} {user.last_name}

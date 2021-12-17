@@ -6,7 +6,7 @@ import * as AuthService from "../../services";
 import EventBus from "../../common/EventBus";
 
 export const NavBar = () => {
-    const [showUserBoard, setShowUserBoard] = useState(false);
+    const [showProfessorPath, setShowProfessorPath] = useState(false);
     const [currentUser, setCurrentUser] = useState<UserInfo | undefined>(undefined);
 
     useEffect(() => {
@@ -14,7 +14,6 @@ export const NavBar = () => {
         
         if (user) {
             setCurrentUser(user);
-            //setShowUserBoard(user.role.includes("ROLE_User"));
         }
 
         EventBus.on("logout", logOut);
@@ -26,7 +25,7 @@ export const NavBar = () => {
 
     const logOut = () => {
         AuthService.logout();
-        setShowUserBoard(false);
+        setShowProfessorPath(false);
         setCurrentUser(undefined);
     };
 
@@ -47,29 +46,12 @@ export const NavBar = () => {
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <div className="navbar-nav mr-auto">
-                    {showUserBoard && (
-                        <li className="nav-item">
-                            <NavLink className="nav-link" to="/user">
-                                User Board
-                            </NavLink>
-                        </li>
-                    )}
-                    {currentUser && (
-                        <li className="nav-item">
-                            <NavLink to={"/user"} className="nav-link">
-                                User
-                            </NavLink>
-                        </li>
-                    )}
-                    
-                </div>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 {currentUser ? (
                     <div className="navbar-nav ml-auto">
                         <li className="nav-item">
                             <NavLink className="nav-link" to="/profile">
-                                {currentUser.username}
+                                {currentUser.first_name+" "+currentUser.last_name}
                             </NavLink>
                         </li>
                         <li className="nav-item">
