@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { getCurrentUser, getUserClasses } from "../../services";
-
+import Table from "react-bootstrap/esm/Table";
 import Button from "react-bootstrap/esm/Button";
 import "./HomeScreen.css";
 import { fetchStudentClasses } from "./HomeScreenHelpers";
@@ -59,7 +59,42 @@ export const HomeScreen = () => {
                         )}
                     </div>
                 </div>
-
+                <div className="col-md-8 p-2">
+                <div className="col-md-12 border p-5">
+                        <h5>JOIN REQUESTS</h5>
+                        <Table>
+                            <thead>
+                                <tr>
+                                    <td> Requested By</td>
+                                    <td> Requester Section</td>
+                                    <td> Forum Post Section</td>
+                                    <td> Current Memories</td>
+                                    <td> Decision</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> 
+                                        <span>
+                                        <Button  size="sm">
+                                            Accept
+                                        </Button>
+                                        </span>
+                                        <span>
+                                        <Button  size="sm" >
+                                            Reject
+                                        </Button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </Table>
+                    </div>
+                    </div>
                 <div className="col-md-8 p-2">
                     <div className="col-md-12 border p-5 text-center">
                         <h5>GROUP REQUEST LIST</h5>
