@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { getCurrentUser, getUserClasses } from "../../services";
-import Table from "react-bootstrap/esm/Table";
+
 import Button from "react-bootstrap/esm/Button";
 import "./HomeScreen.css";
-import { ProfessorProposals } from "./ProfessorProposals";
 import { fetchStudentClasses } from "./HomeScreenHelpers";
 
 export const HomeScreen = () => {
@@ -14,23 +13,20 @@ export const HomeScreen = () => {
     useEffect(() => {
         fetchStudentClasses(user.school_id);
     }, [user]);
-    
+
     var firstLetter = user.first_name.charAt(0);
     var lastLetter = user.last_name.charAt(0);
 
     var department;
-    if (user.role == 'Professor'){
+    if (user.role == "Professor") {
         department = "Department:";
     } else {
-        department = "Major:"
+        department = "Major:";
     }
     return (
         <div className="p-3">
             <div className="row px-3">
-                <div className="col-md-1 border border-5 rounded-circle mb-3">
-                    <p className="profileContainer">{firstLetter} {lastLetter}</p>
-                    
-                </div>
+                <div className="col-md-1 border border-5 rounded-circle mb-3"></div>
                 <div className="col-md-11 border-3 border-bottom py-3 mb-3">
                     <h5>
                         {user.first_name} {user.last_name}
@@ -66,32 +62,29 @@ export const HomeScreen = () => {
                         )}
                     </div>
                 </div>
-                <div className="col-md-8 p-2">
-                { user.role == "Professor" ? 
-                <ProfessorProposals/>
-                : 
-                
-                <div>
 
-                    Add Student Table here
-                </div>
-                }
-                
-                
+                <div className="col-md-8 p-2">
                     <div className="col-md-12 border p-5 text-center">
                         <h5>GROUP REQUEST LIST</h5>
                     </div>
                     <div className="col-md-12 border p-2">
                         <div className="d-grid gap-2">
-                            <Button
-                                href="/forum"
-                                variant="primary"
-                                size="lg"
-                            >
+                            <Button href="/forum" variant="primary" size="lg">
                                 Create Group Request
                             </Button>
                             <Button variant="secondary" size="lg">
                                 Update Group Request
+                            </Button>
+                            <Button
+                                href={
+                                    user.role == "professor"
+                                        ? "/professorGroupDetails"
+                                        : "/studentGroupDetails"
+                                }
+                                variant="secondary"
+                                size="lg"
+                            >
+                                View Group Details
                             </Button>
                             <Button variant="secondary" size="lg">
                                 View Group
