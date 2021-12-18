@@ -10,6 +10,7 @@ import SearchClassList from "./routes/classlist";
 import PostComment from "./routes/comment";
 import JoinRequests from "./routes/joinRequest";
 import GroupPage from "./routes/groups";
+import Proposals from "./routes/proposal";
 
 import { header } from "./middleware/account";
 
@@ -49,6 +50,7 @@ export class App {
         this.app.use("/comment", PostComment);
         this.app.use("/join", JoinRequests);
         this.app.use("/groups", GroupPage);
+        this.app.use("/proposal", Proposals);
     }
 
     async listen() {

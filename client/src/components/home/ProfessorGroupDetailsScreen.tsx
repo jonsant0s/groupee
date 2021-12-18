@@ -37,15 +37,15 @@ export const ProfessorGroupDetailsScreen:React.FC<ProfessorProps> = ({ user }) =
 		});
     }, [loading]);
 
-	const handleUpdateStatus = ( post_id:number, status: string) => {
+	const handleUpdateStatus = ( post_id:number, status: string ) => {
 		Api.UpdateGroupRequest(post_id, status)     // Update group request to approves
         .then((res) => {
+            console.log(res);
             if(status==="Approved") {
                 return Api.CreateGroups(post_id);   // Create new group
             }
 		})
         .then((res) => {
-            console.log(res);
             setLoading(!loading);
         });
 	}

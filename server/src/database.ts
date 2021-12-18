@@ -6,9 +6,9 @@ export async function database() {
 		host: "localhost", //localhost
 		user: "root",
 		password: "password",
-		multipleStatements: true,
-		connectionLimit: 5
+		multipleStatements: true
 	});
-
+	
 	return db;
 }
+

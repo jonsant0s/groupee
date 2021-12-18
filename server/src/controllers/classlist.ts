@@ -16,7 +16,10 @@ export async function getCourseInfo (req: Request | any, res: Response) {
             ON C.instructor_id=P.professor_id`
         ).then((result) => {
             const data = Object(result[0]);
-            res.send(data);
+            if(data.length <= 0) {
+                return res.send(`This user does not teach a course.`);
+            }
+            return res.send(data);
         }).catch((err) => {
             res.send(err);
         });

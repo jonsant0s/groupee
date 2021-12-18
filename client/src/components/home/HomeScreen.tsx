@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { getCurrentUser, getUserClasses } from "../../services";
+import { fetchUserClasses } from "./HomeScreenHelpers";
 
 import Button from "react-bootstrap/esm/Button";
 import "./HomeScreen.css";
-import { fetchUserClasses } from "./HomeScreenHelpers";
+
 
 export const HomeScreen = () => {
     const [user, setUser] = useState(getCurrentUser);
@@ -14,9 +15,6 @@ export const HomeScreen = () => {
         let apiRoute = user.role==="Professor"? "course" : "fetch";
         fetchUserClasses(apiRoute, user.school_id);
     }, []);
-
-    var firstLetter = user.first_name.charAt(0);
-    var lastLetter = user.last_name.charAt(0);
 
     var department;
     if (user.role == 'Professor') {
