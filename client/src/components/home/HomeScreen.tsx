@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { getCurrentUser, getUserClasses } from "../../services";
+import { fetchUserClasses } from "./HomeScreenHelpers";
 
 import Button from "react-bootstrap/esm/Button";
 import "./HomeScreen.css";
-import { fetchUserClasses } from "./HomeScreenHelpers";
 
 export const HomeScreen = () => {
     const [user, setUser] = useState(getCurrentUser);

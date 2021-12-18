@@ -1,6 +1,26 @@
 import { Request, Response } from "express";
 import { database } from "../database";
 
+export async function getGroups(req: Request, res: Response) {
+    const db = await database();
+    const { course_id, group_no } = req.query;
+    
+    db.query (`
+        SELECT DISTINCT *
+        FROM groupee.classlist
+        WHERE course_id=${course_id} AND ${group_no? `group_no=${group_no}`: `group_no IS NULL`}`
+    )
+    .then((result) => {
+        return res.json(result[0])
+    })
+    .catch((err) => {
+        return res.json({
+            status:400,
+            message: err
+        });
+    })
+}
+
 export async function reviewGroupRequests(req: Request, res: Response) {
     const db = await database();
     const { professor_id } = req.query;
@@ -9,15 +29,14 @@ export async function reviewGroupRequests(req: Request, res: Response) {
     db.query (`
         SELECT G.*, S.first_name, S.last_name
         FROM (
-            SELECT C.course_id, C.course_name, R.request_id, R.poster_id, R.size, R.availability,R.section
+            SELECT C.course_id, C.course_name, R.request_id, R.poster_id, R.size, R.availability, R.section
             FROM groupee.group_request AS R, groupee.course as C
             WHERE R.size>=${memberCap} AND
                   R.status<>"Approved" AND R.status<>"Rejected" AND
                   C.instructor_id=${professor_id} AND
                   C.course_id=R.course_id ) AS G
         INNER JOIN groupee.student AS S
-            ON G.poster_id=S.student_id
-        `
+            ON G.poster_id=S.student_id`
     )
     .then((result) => {
         return res.json(result[0])
@@ -65,9 +84,9 @@ export async function updateStudentGroup(req: Request, res: Response) {
     db.query (`
         UPDATE groupee.classlist AS C
         SET group_no=(SELECT max(group_no) FROM groupee.group)
-        WHERE course_id=${course_id} AND student_id=${student_id}`
+        WHERE C.course_id=${course_id} AND C.student_id=${student_id}`
     )
-    .then(() => {
+    .then(()=>{
         return res.json({
             status:200,
             message: "Group members updated."

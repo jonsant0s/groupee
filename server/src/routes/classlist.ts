@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { FileWatcherEventKind } from "typescript";
 import { searchStudent, fetchStudentClasses, getCourseInfo } from "../controllers/classlist";
 
 const router = Router();

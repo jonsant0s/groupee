@@ -80,6 +80,6 @@ export async function postComment(req: Request, res: Response) {
     ).then(() => {
         res.send(`Added new comment to post: ${param.post_id}`);
     }).catch((err) => {
-        res.send(`Failed to add new comment....\n\n${err}`);
+        res.send(`Failed to add new comment....\n\n${param.post_id} does not exist.`);
     })
 }
