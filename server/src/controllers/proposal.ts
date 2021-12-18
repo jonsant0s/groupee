@@ -52,11 +52,11 @@ export async function getProposals(req: Request | any, res: Response) {
 
 export async function submitProposal(req: Request | any, res: Response) {
 	const db = await database();
-	const { submisstion_id, group_no, topic, description } = req.body;
+	const { submission_id, group_no, topic, description } = req.body;
 
 	db.query(`
-		INSERT INTO groupee.proposal (submisstion_id, group_no, topic, description)
-		VALUES (${submisstion_id}, ${group_no}, "${topic}", "${description}")`
+		INSERT INTO groupee.proposal (submission_id, group_no, topic, description)
+		VALUES (${submission_id}, ${group_no}, "${topic}", "${description}")`
 	)
 	.then(() => {
 		return res.json({
