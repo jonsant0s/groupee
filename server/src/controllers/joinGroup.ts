@@ -137,7 +137,7 @@ export async function updateJoinRequest(req: Request | any, res: Response) {
 		`)
 	})
 	.then(() => {
-		let message = `Added a member to your group request!'`;
+		let message = `Added a member to your group request#${param.post_id}!'`;
 
 		if(param.status==="Rejected") {
 			message = `Rejected request to join your group.'`;
@@ -173,7 +173,7 @@ export async function requestToJoin(req: Request | any, res: Response) {
 	.then(() => {
 		return res.json({
 			status: 200,
-			message: `Submitted a request to join group in posting #${param.post_id}`
+			message: `Submitted a request to join group in posting #${param.post_id}. Your request status: Pending`
 		});
 	})
 	.catch(() => {

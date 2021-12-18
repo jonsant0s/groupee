@@ -101,16 +101,16 @@ export async function createGroupRequest(req: Request, res: Response) {
     const pref: NewRequest = req.body;
 
     const posts = await db.query(`
-        SELECT C.course_id 
-        FROM groupee.course AS C
+        SELECT C.course_id, X.request_id
+        FROM groupee.course AS C, groupee.group_request AS X
         WHERE EXISTS (
-            SELECT R.course_id
+            SELECT R.course_id, R.request_id
             FROM groupee.group_request AS R
             WHERE R.poster_id=${pref.student_id} AND
                 C.course_id=R.course_id AND
                 C.course_name="${pref.courseName}")`
         )
-    const prevPost = Object(posts[0])
+    const prevPost = Object(posts[0]);
     
     if(prevPost.length > 0) {
         return res.json({

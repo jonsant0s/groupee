@@ -68,28 +68,28 @@ export async function signup(req: Request, res: Response) {
     const studentInfo = await db.query(`SELECT * FROM groupee.student WHERE student_id=${form.student_id}`);
     const student = Object(studentInfo[0])[0];
 
-    if (student){
+    if (student) {
         db.query(`
-        INSERT INTO groupee.account (username, password, first_name, middle_name, last_name)
-        VALUES ("${form.username}", 
-                "${pass}", 
-                "${form.first_name}", 
-                "${form.middle_name}", 
-                "${form.last_name}")`)
+            INSERT INTO groupee.account (username, password, first_name, middle_name, last_name)
+            VALUES ("${form.username}", 
+                    "${pass}", 
+                    "${form.first_name}", 
+                    "${form.middle_name}", 
+                    "${form.last_name}")`)
         .then(() => {
             db.query(`
             INSERT INTO groupee.student_account (username, student_id)
             VALUES ("${form.username}", 
                     ${student.student_id})`)
             }).then(() => {
-                return res.status(200).send(`$Student account created!`);
+                return res.status(200).send(`Student account: ${form.username} created for student #${form.student_id}!`);
             }).catch((err) => {
-                return res.send(err);
+                return res.send(`Account with username ${form.username} already exists.`);
             })
         .catch((err) => {
             return res.send(err);
         });
     } else {
-        return res.send({message: `Student ID already exists`});
+        return res.send({message: `Student ID: ${form.student_id} does not exist in the database.`});
     }
 }
