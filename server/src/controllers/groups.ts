@@ -65,7 +65,7 @@ export async function updateStudentGroup(req: Request, res: Response) {
     db.query (`
         UPDATE groupee.classlist AS C
         SET group_no=(SELECT max(group_no) FROM groupee.group)
-        WHERE C.course_id=${course_id} AND C.student_id=${student_id}`
+        WHERE course_id=${course_id} AND student_id=${student_id}`
     )
     .then(() => {
         return res.json({

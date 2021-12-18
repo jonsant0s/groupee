@@ -7,6 +7,5 @@ router.route("/").post(createGroup);
 router.route("/").get(reviewGroupRequests);
 router.route("/members").get(getMemberRequestInfo);
 router.route("/members").put(updateStudentGroup);
-router.route("/getGroups").get(getGroups)
 
 export default router;
