@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createGroup, getGroups, getMemberRequestInfo, reviewGroupRequests, updateStudentGroup } from "../controllers/groups";
+import { createGroup,  getMemberRequestInfo, reviewGroupRequests, updateStudentGroup } from "../controllers/groups";
 
 const router = Router();
 
