@@ -11,4 +11,3 @@ export async function database() {
 	
 	return db;
 }
-

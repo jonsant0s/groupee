@@ -6,7 +6,6 @@ import { fetchUserClasses } from "./HomeScreenHelpers";
 import Button from "react-bootstrap/esm/Button";
 import "./HomeScreen.css";
 
-
 export const HomeScreen = () => {
     const [user, setUser] = useState(getCurrentUser);
     const [userClasses, setUserClasses] = useState(getUserClasses);
@@ -15,6 +14,9 @@ export const HomeScreen = () => {
         let apiRoute = user.role==="Professor"? "course" : "fetch";
         fetchUserClasses(apiRoute, user.school_id);
     }, []);
+
+    var firstLetter = user.first_name.charAt(0);
+    var lastLetter = user.last_name.charAt(0);
 
     var department;
     if (user.role == 'Professor') {

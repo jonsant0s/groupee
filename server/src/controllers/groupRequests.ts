@@ -96,7 +96,6 @@ export async function getGroupRequests(req: Request, res: Response) {
     }
 }
 
-
 export async function createGroupRequest(req: Request, res: Response) {
     const db = await database();
     const pref: NewRequest = req.body;
