@@ -8,7 +8,7 @@ interface ProfessorProps {
     user: UserInfo
 }
 
-interface RequestIssues {
+interface GroupRequestInfo {
     availability: string,
     course_id: number,
     course_name:string,
@@ -27,7 +27,7 @@ interface Members {
 }
 
 export const ProfessorGroupDetailsScreen:React.FC<ProfessorProps> = ({ user }) => {
-    const [postedPreferences, setPostedPreferences] = useState<RequestIssues[]>([]);
+    const [postedPreferences, setPostedPreferences] = useState<GroupRequestInfo[]>([]);
     const [members, setMembers] = useState<Members[]>([]);
     const [loading, setLoading] = useState(false);
 
