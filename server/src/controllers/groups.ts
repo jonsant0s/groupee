@@ -101,29 +101,3 @@ export async function createGroup(req: Request, res: Response) {
         });
     })
 }
-
-export async function getGroups(req: Request | any, res: Response) {
-    const db = await database();
-    const { student_id } = req.query;
-
-    db.query (`
-        SELECT DISTINCT *
-        FROM groupee.group as G, groupee.classlist as C
-        WHERE G.group_no=C.group_no AND C.student_id=${student_id}`
-   )
-    .then((result) => {
-            const data = Object(result[0])[0];
-
-            if(data && data.length == 0) {
-                res.json({message: `Student ${student_id} does not have any groups.`});
-            } else {
-                res.json(result[0]);
-            }
-    })
-    .catch((err) => {
-        return res.json({
-            status:400,
-            message: err
-        });
-    })
-}
