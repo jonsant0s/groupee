@@ -6,7 +6,7 @@ import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 
 import "./LoginForm.css";
-import { fetchStudentClasses } from "components/home/HomeScreenHelpers";
+import { fetchUserClasses } from "components/home/HomeScreenHelpers";
 
 export const LoginForm = () => {
     const navigate = useNavigate();
@@ -35,7 +35,8 @@ export const LoginForm = () => {
 
             login(loginValues)
                 .then((user) => {
-                    fetchStudentClasses(user.school_id);
+                    let apiRoute = user.role==="Professor"? "course" : "fetch";
+                    fetchUserClasses(apiRoute, user.school_id);
                     navigate("/home");
                     window.location.reload();
                 })

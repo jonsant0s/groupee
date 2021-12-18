@@ -51,6 +51,8 @@ export interface CommentInfo {
 export interface JoinRequest {
     post_id: number,
     student_id: number,
+    post_sectionNo: number,
     join: boolean,
+    members: number,
     status: string
 }

@@ -92,8 +92,4 @@ export async function signup(req: Request, res: Response) {
     } else {
         return res.send({message: `Student ID already exists`});
     }
-
-
-
-    
 }

@@ -4,14 +4,14 @@ import {
     createGroupRequest,
     deleteGroupPreference,
     getGroupPreferencePost,
-    updateMemberCount
+    updateGroupRequest
 } from "../controllers/groupRequests";
 
 const router: Router = express.Router();
 
 router.route("/").get(getGroupRequests);
 router.route("/").delete(deleteGroupPreference);
-router.route("/").put(updateMemberCount);
+router.route("/").put(updateGroupRequest);
 router.route("/create").post(createGroupRequest);
 router.route("/profile").get(getGroupPreferencePost);
 

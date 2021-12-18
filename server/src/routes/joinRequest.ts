@@ -12,7 +12,7 @@ router.route("/").post(requestToJoin); // When student joins a group posting on 
 router.route("/").put(updateJoinRequest); // Updates state of join request
 router.route("/").delete(deleteJoinRequest);
 router.route("/requests").get(getJoinRequest); // Shows own join requests with current status.
-router.route("/conflict").get(getRequestIssues); // Professor's homepage, shows join requests with conflicts
+router.route("/review").get(getRequestIssues); // Professor's homepage, shows full groups
 router.route("/posting").get(getPostingRequests); // At homepage of student who created group_requests (posts on forum)
 
 export default router;

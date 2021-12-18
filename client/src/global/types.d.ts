@@ -93,6 +93,17 @@ interface PostComment {
     username: string
 }
 
+interface JoinInfo {
+	availability: string,
+	course_name: string,
+	join_group: number,
+	post_id: number,
+	section: number,
+	size: number,
+	status: string,
+	student_id: number
+}
+
 type ChangeEvent = React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> 
 type FormEvent = React.FormEvent<EventTarget & HTMLButtonElement | HTMLFormElement>
 // Need role?

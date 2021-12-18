@@ -2,11 +2,11 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3001/";
 
-export const fetchStudentClasses = (id: string) => {
+export const fetchUserClasses = (route: string, id: string) => {
     return axios
-        .get(API_URL + "classlist/fetch", {
+        .get(`${API_URL}classlist/${route}`, {
             params: {
-                student_id: id,
+                school_id: id,
             },
         })
         .then((response) => {
