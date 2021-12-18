@@ -65,7 +65,7 @@ export async function updateStudentGroup(req: Request, res: Response) {
     db.query (`
         UPDATE groupee.classlist AS C
         SET group_no=(SELECT max(group_no) FROM groupee.group)
-        WHERE course_id=${course_id} AND student_id=${student_id}`
+        WHERE C.course_id=${course_id} AND C.student_id=${student_id}`
     )
     .then(() => {
         return res.json({
@@ -93,6 +93,32 @@ export async function createGroup(req: Request, res: Response) {
             status:200,
             message: "Your group was created!"
         });
+    })
+    .catch((err) => {
+        return res.json({
+            status:400,
+            message: err
+        });
+    })
+}
+
+export async function getGroups(req: Request | any, res: Response) {
+    const db = await database();
+    const { student_id } = req.query;
+
+    db.query (`
+        SELECT DISTINCT *
+        FROM groupee.group as G, groupee.classlist as C
+        WHERE G.group_no=C.group_no AND C.student_id=${student_id}`
+   )
+    .then((result) => {
+            const data = Object(result[0])[0];
+
+            if(data && data.length == 0) {
+                res.json({message: `Student ${student_id} does not have any groups.`});
+            } else {
+                res.json(result[0]);
+            }
     })
     .catch((err) => {
         return res.json({

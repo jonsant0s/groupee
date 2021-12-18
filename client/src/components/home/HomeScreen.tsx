@@ -11,7 +11,7 @@ export const HomeScreen = () => {
     const [userClasses, setUserClasses] = useState(getUserClasses);
 
     useEffect(() => {
-        let apiRoute = user.role==="Professor"? "course" : "fetch";
+        let apiRoute = user.role === "Professor" ? "course" : "fetch";
         fetchUserClasses(apiRoute, user.school_id);
     }, []);
 
@@ -19,10 +19,10 @@ export const HomeScreen = () => {
     var lastLetter = user.last_name.charAt(0);
 
     var department;
-    if (user.role == 'Professor') {
+    if (user.role == "Professor") {
         department = "Department:";
     } else {
-        department = "Major:"
+        department = "Major:";
     }
     return (
         <div className="p-3">
@@ -35,14 +35,18 @@ export const HomeScreen = () => {
                     <p>
                         Role: {user.role} <br />
                         Student ID: {user.school_id} <br />
-                        { department } CS
+                        {department} CS
                     </p>
                 </div>
 
                 <div className="col-md-4 p-2">
                     <div className="d-flex flex-column border p-3">
-                        <h6>{user.role==="Professor" ? `Classes` : `Enrolled classes`}</h6>
-                        { userClasses ? (
+                        <h6>
+                            {user.role === "Professor"
+                                ? `Classes`
+                                : `Enrolled classes`}
+                        </h6>
+                        {userClasses ? (
                             userClasses.map((data) => {
                                 return (
                                     <div
@@ -65,16 +69,17 @@ export const HomeScreen = () => {
                 </div>
 
                 <div className="col-md-8 p-2">
-                    <div className="col-md-12 border p-5 text-center">
-                        <h5>GROUP REQUEST LIST</h5>
-                    </div>
                     <div className="col-md-12 border p-2">
                         <div className="d-grid gap-2">
                             <Button href="/forum" variant="primary" size="lg">
                                 Create Group Request
                             </Button>
-                            <Button variant="secondary" size="lg">
-                                Update Group Request
+                            <Button
+                                href="/proposals"
+                                variant="secondary"
+                                size="lg"
+                            >
+                                View Group Details and Proposals
                             </Button>
                             <Button
                                 href={
@@ -85,10 +90,7 @@ export const HomeScreen = () => {
                                 variant="secondary"
                                 size="lg"
                             >
-                                View Group Details
-                            </Button>
-                            <Button variant="secondary" size="lg">
-                                View Group
+                                View Group Requests
                             </Button>
                         </div>
                     </div>

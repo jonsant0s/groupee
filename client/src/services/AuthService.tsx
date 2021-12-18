@@ -49,3 +49,10 @@ export const getUserClasses = () => {
 
     return;
 };
+
+export const getUserGroups = () => {
+    const userGroupsStr = localStorage.getItem("userGroups");
+    if (userGroupsStr) return JSON.parse(userGroupsStr);
+
+    return;
+};
