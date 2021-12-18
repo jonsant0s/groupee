@@ -57,6 +57,7 @@ export async function fetchStudentClasses (req: Request | any, res: Response) {
                 res.json({message: `Student ${student_id} is not enrolled in any courses.`});
             } else {
                 res.json(result[0]);
+                console.log(data)
             }
 
         }).catch((err) => {

@@ -1,20 +1,54 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { getCurrentUser, getUserClasses } from "../../services";
+import { getCurrentUser, getProfessor } from "../../services";
 import Navbar from "react-bootstrap/Navbar";
 import { NavBarHome } from "../navigation/NavBarHome";
 
 import Button from "react-bootstrap/esm/Button";
 import "./HomeScreen.css";
-import { fetchStudentClasses } from "./HomeScreenHelpers";
+import { fetchCourseInfo } from "./HomeScreenHelpers";
 
 export const CourseHomeScreen = () => {
     const [user, setUser] = useState(getCurrentUser);
-    const [userClasses, setUserClasses] = useState(getUserClasses);
+    const [classlistSearchValues, setClasslistSearchValues] =
+        useState<PrevClassInfo>({
+            course_name: "",
+            course_id: "",
+            student_id: null,
+        });
 
+    const[professorName, setProfessorName ] = useState(getProfessor);
+    
     useEffect(() => {
-        fetchStudentClasses(user.school_id);
-    }, [user]);
+        let search = window.location.search;
+        let params = new URLSearchParams(search);
+        let courseID = params.get("course_id");
+
+        if(courseID){
+            console.log(courseID);
+            fetchCourseInfo(courseID);
+        }
+    }, []);
+        /*
+    useEffect(() => {
+        let search = window.location.search;
+        let params = new URLSearchParams(search);
+        let courseName = params.get("course_name");
+        let courseID = params.get("course_id");
+        
+        if (courseID) {
+            let prev = { ...classlistSearchValues };
+            prev.course_id = courseID;
+            setClasslistSearchValues(prev);
+        }
+
+        if (courseName) {
+            let prev = { ...classlistSearchValues };
+            prev.course_name = courseName;
+            setClasslistSearchValues(prev);
+        }
+        
+    }, []);*/
 
     var firstLetter = user.first_name.charAt(0);
     var lastLetter = user.last_name.charAt(0);
@@ -28,16 +62,29 @@ export const CourseHomeScreen = () => {
     return (
         <div className="p-3">
             <div className="row px-3">
-                <div className="col-md-1 border border-5 rounded-circle mb-1"></div>
-                <div className="col-md-11 border-3 border-bottom py-3">
-                    <h5>
-                        {user.first_name} {user.last_name}
-                    </h5>
-                    <p>
-                        Role: {user.role} <br />
-                        Student ID: {user.school_id} <br />
-                        {department} CS
-                    </p>
+                <div className="col-md-12 border-3 border-bottom py-3">
+                    
+
+                    {professorName ? (
+                            professorName.map((data) => {
+                                return (
+                                    <div key={data.course_id}>
+                                        <h2>
+                                            {data.course_name}
+                                        </h2>
+                                        <p>
+                                            Instructor: {data.first_name} {data.last_name} <br />
+                                            Instructor ID: {data.professor_id} <br />
+                                        </p>
+                                    </div>
+                                );
+                            })
+                        ) : (
+                            <div></div>
+                        )}
+                        {/*{classlistSearchValues.course_id}: {classlistSearchValues.course_name}*/ }
+                    
+                    
                 </div>
                 <NavBarHome/>
                 <div className="col-md-12 border-3 border-bottom"/>

@@ -3,6 +3,12 @@ interface ClassListSearchInfo {
     student_id: number | null;
 }
 
+interface PrevClassInfo {
+    course_name: string;
+    course_id: string;
+    student_id: number | null;
+}
+
 interface LoginInfo {
     username: string,
     password?: string

@@ -18,3 +18,21 @@ export const fetchStudentClasses = (id: string) => {
             return err;
         });
 };
+
+export const fetchCourseInfo = (id: string) => {
+    return axios
+        .get(API_URL + "course/fetch", {
+            params: {
+                course_id: id,
+            },
+        })
+        .then((response) => {
+            console.log(response.data);
+            localStorage.setItem("professorName", JSON.stringify(response.data));
+            return response.data;
+        })
+        .catch((err) => {
+            return err;
+        });
+};
+

@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
+import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import Container from "react-bootstrap/Container";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { NavLink } from 'react-router-dom';
+import { getCurrentUser, getUserClasses } from "../../services";
+import Button from "react-bootstrap/esm/Button";
+import { fetchStudentClasses } from "../home/HomeScreenHelpers";
 
 import * as AuthService from "../../services";
 
@@ -10,6 +15,9 @@ import EventBus from "../../common/EventBus";
 export const NavBarHome = () => {
     const [showProfessorPath, setShowProfessorPath] = useState(false);
     const [currentUser, setCurrentUser] = useState<UserInfo | undefined>(undefined);
+    const [user, setUser] = useState(getCurrentUser);
+
+    const [userClasses, setUserClasses] = useState(getUserClasses);
 
     useEffect(() => {
         const user = AuthService.getCurrentUser();
@@ -25,6 +33,10 @@ export const NavBarHome = () => {
         }
     }, []);
 
+    useEffect(() => {
+        fetchStudentClasses(user.school_id);
+    }, [user]);
+
     const logOut = () => {
         AuthService.logout();
         setShowProfessorPath(false);
@@ -33,16 +45,22 @@ export const NavBarHome = () => {
 
     return (
         <div>
-            <Navbar expand="lg">
-                <Navbar.Brand href="/home"> 
-                <NavDropdown title="Courses" id="collasible-nav-dropdown">
-        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-        <NavDropdown.Divider />
-        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-      </NavDropdown>
-      </Navbar.Brand>
+            <Nav variant="tabs">
+                <NavDropdown title="Courses" id="collasible-nav-dropdown" color="black">
+                {userClasses ? (
+                            userClasses.map((data) => {
+                                return (
+                                        <NavDropdown.Item
+                                            href={`/coursehome?course_name=${data.course_name}`}
+                                        >
+                                            {data.course_name}
+                                        </NavDropdown.Item>
+                                );
+                            })
+                        ) : (
+                            <div></div>
+                        )}
+                </NavDropdown>
                 <Navbar.Collapse id="basic-navbar-nav">
                 {currentUser ? (
                     <div className="navbar-nav ml-auto">
@@ -73,7 +91,7 @@ export const NavBarHome = () => {
                     </div>
                 )}
                 </Navbar.Collapse>
-            </Navbar>
+            </Nav>
         </div>
     );
 };

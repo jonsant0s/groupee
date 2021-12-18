@@ -49,3 +49,9 @@ export const getUserClasses = () => {
 
     return;
 };
+export const getProfessor = () => {
+    const currProfessor = localStorage.getItem("professorName");
+    if (currProfessor) return JSON.parse(currProfessor);
+
+    return;
+};

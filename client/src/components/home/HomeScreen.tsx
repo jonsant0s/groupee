@@ -39,8 +39,6 @@ export const HomeScreen = () => {
                         {department} CS
                     </p>
                 </div>
-                <NavBarHome/>
-                <div className="col-md-12 border-3 border-bottom"/>
 
                 <div className="col-md-4 p-2">
                     <div className="d-flex flex-column border p-3">
@@ -52,12 +50,12 @@ export const HomeScreen = () => {
                                         className="p-2 border-bottom"
                                         key={data.course_id}
                                     >
-                                        <NavLink
+                                        <a
                                             className="nav-link"
-                                            to={`/coursehome?course_name=${data.course_name}`}
+                                            href={`/coursehome?course_name=${data.course_name}&course_id=${data.course_id}`}
                                         >
                                             {data.course_name}
-                                        </NavLink>
+                                        </a>
                                     </div>
                                 );
                             })

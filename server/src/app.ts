@@ -9,6 +9,7 @@ import RoleRoutes from "./routes/role";
 import SearchClassList from "./routes/classlist";
 import PostComment from "./routes/comment";
 import JoinRequests from "./routes/joinRequest";
+import GetProfessor from "./routes/course";
 
 import { header } from "./middleware/account";
 
@@ -46,6 +47,7 @@ export class App {
         this.app.use("/role", RoleRoutes);
         this.app.use("/classlist", SearchClassList);
         this.app.use("/comment", PostComment);
+        this.app.use("/course", GetProfessor);
         this.app.use("/join", JoinRequests);
     }
 
