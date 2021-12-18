@@ -2,6 +2,26 @@ import { database } from "../database";
 import { ClassList } from "../types";
 import { Request, Response } from "express";
 
+export async function getCourseInfo (req: Request | any, res: Response) {
+    const db = await database();
+    const { school_id } = req.query;
+
+    db.query(`
+            SELECT DISTINCT *
+            FROM groupee.course AS C
+            INNER JOIN (
+                SELECT *
+                FROM groupee.professor
+                WHERE professor_id=${school_id}) AS P
+            ON C.instructor_id=P.professor_id`
+        ).then((result) => {
+            const data = Object(result[0]);
+            res.send(data);
+        }).catch((err) => {
+            res.send(err);
+        });
+}
+
 export async function searchStudent (req: Request | any, res: Response) {
     const db = await database();
     const { course_name, student_id }: ClassList = req.query;
@@ -38,7 +58,7 @@ export async function searchStudent (req: Request | any, res: Response) {
 
 export async function fetchStudentClasses (req: Request | any, res: Response) {
     const db = await database();
-    const {student_id} = req.query;
+    const { school_id } = req.query;
 
     db.query(`
             SELECT DISTINCT *
@@ -48,13 +68,13 @@ export async function fetchStudentClasses (req: Request | any, res: Response) {
             INNER JOIN ( 
                 SELECT student_id
                 FROM groupee.student 
-                WHERE student_id=${student_id} ) AS S 
+                WHERE student_id=${school_id} ) AS S 
                 ON S.student_id=L.student_id`
     ).then((result) => {
             const data = Object(result[0])[0];
 
             if(data && data.length == 0) {
-                res.json({message: `Student ${student_id} is not enrolled in any courses.`});
+                res.json({message: `Student ${school_id} is not enrolled in any courses.`});
             } else {
                 res.json(result[0]);
             }

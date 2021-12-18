@@ -4,24 +4,25 @@ import { getCurrentUser, getUserClasses } from "../../services";
 
 import Button from "react-bootstrap/esm/Button";
 import "./HomeScreen.css";
-import { fetchStudentClasses } from "./HomeScreenHelpers";
+import { fetchUserClasses } from "./HomeScreenHelpers";
 
 export const HomeScreen = () => {
     const [user, setUser] = useState(getCurrentUser);
     const [userClasses, setUserClasses] = useState(getUserClasses);
 
     useEffect(() => {
-        fetchStudentClasses(user.school_id);
-    }, [user]);
+        let apiRoute = user.role==="Professor"? "course" : "fetch";
+        fetchUserClasses(apiRoute, user.school_id);
+    }, []);
 
     var firstLetter = user.first_name.charAt(0);
     var lastLetter = user.last_name.charAt(0);
 
     var department;
-    if (user.role == "Professor") {
+    if (user.role == 'Professor') {
         department = "Department:";
     } else {
-        department = "Major:";
+        department = "Major:"
     }
     return (
         <div className="p-3">
@@ -34,14 +35,14 @@ export const HomeScreen = () => {
                     <p>
                         Role: {user.role} <br />
                         Student ID: {user.school_id} <br />
-                        {department} CS
+                        { department } CS
                     </p>
                 </div>
 
                 <div className="col-md-4 p-2">
                     <div className="d-flex flex-column border p-3">
-                        <h6>Enrolled in:</h6>
-                        {userClasses ? (
+                        <h6>{user.role==="Professor" ? `Classes` : `Enrolled classes`}</h6>
+                        { userClasses ? (
                             userClasses.map((data) => {
                                 return (
                                     <div
@@ -77,7 +78,7 @@ export const HomeScreen = () => {
                             </Button>
                             <Button
                                 href={
-                                    user.role == "professor"
+                                    user.role === "Professor"
                                         ? "/professorGroupDetails"
                                         : "/studentGroupDetails"
                                 }

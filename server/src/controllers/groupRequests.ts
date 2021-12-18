@@ -2,20 +2,20 @@ import { Request, Response } from "express";
 import { database } from "../database";
 import { NewRequest } from "../types";
 
-// Posting should update everytime new student joins
-export async function updateMemberCount(req: Request, res: Response) {
+export async function updateGroupRequest(req: Request, res: Response) {
     const db = await database();
-    const { post_id, member_count } = req.query;
+    const { post_id, status } = req.body;
+    console.log(status);
 
     db.query(`
         UPDATE groupee.group_request
-        SET size=${member_count}
-        WHERE post_id=${post_id}`
+        SET status="${status? status:`status`}"
+        WHERE request_id=${post_id}`
     )
     .then(() => {
         return res.json({
             status:200,
-            message: `Added new member to group request.`
+            message: `Updated group request #${post_id} status to ${status}.`
         });
     })
     .catch((err) => {
@@ -66,7 +66,6 @@ export async function deleteGroupPreference(req: Request, res: Response) {
     });
 }
 
-// Gets all posts on forum depending on classes student is enrolled in
 export async function getGroupRequests(req: Request, res: Response) {
     const db = await database();
     const { school_id } = req.query;
@@ -74,15 +73,15 @@ export async function getGroupRequests(req: Request, res: Response) {
     const id = await db.query (
         `SELECT DISTINCT R.*, A.username, C.course_name
          FROM groupee.group_request AS R
-         JOIN ( SELECT X.course_id, X.course_name, S.student_id
+         JOIN ( SELECT *
                 FROM groupee.course AS X
-                JOIN groupee.classlist AS L
-                    ON X.course_id=L.course_id
-                JOIN ( 
-                    SELECT student_id
-                    FROM groupee.student 
-                    WHERE student_id=${school_id} ) AS S
-                ON S.student_id=L.student_id ) AS C
+                WHERE EXISTS (
+                    SELECT *
+                    FROM groupee.classlist AS Y
+                    WHERE Y.student_id=${school_id} OR
+                          (X.course_id=Y.course_id AND
+                           X.instructor_id=${school_id}))
+                ) AS C
             ON C.course_id=R.course_id
          JOIN groupee.student_account AS A
             ON A.student_id=R.poster_id`
@@ -97,28 +96,35 @@ export async function getGroupRequests(req: Request, res: Response) {
     }
 }
 
-// Posts new group request on forum
 export async function createGroupRequest(req: Request, res: Response) {
     const db = await database();
     const pref: NewRequest = req.body;
 
+    const posts = await db.query(`
+        SELECT C.course_id 
+        FROM groupee.course AS C
+        WHERE EXISTS (
+            SELECT R.course_id
+            FROM groupee.group_request AS R
+            WHERE R.poster_id=${pref.student_id} AND
+                C.course_id=R.course_id AND
+                C.course_name="${pref.courseName}")`
+        )
+    const prevPost = Object(posts[0])
+    
+    if(prevPost.length > 0) {
+        return res.json({
+            status:400,
+            message: `You have an existing post for ${pref.courseName}. (Post ID: #${prevPost[0].request_id})`
+        });
+    }
+
     db.query(`
-        SELECT course_id
-        FROM groupee.course
-        WHERE course_name="${pref.courseName}"`)
-    .then((result) => {
-        const course = Object(result[0])[0];
-        
-        return db.query(`
-            INSERT IGNORE INTO groupee.group_request (request_id, poster_id, availability, size, course_id, section, comments)
-            VALUES (${pref.requestID}, 
-                    ${pref.student_id}, 
-                    "${pref.availability}", 
-                    ${pref.group_size},
-                    ${course.course_id},
-                    ${pref.section},
-                    "${pref.comments}")`)
-    })
+        INSERT IGNORE INTO groupee.group_request (course_id, request_id, poster_id, availability, size, section, comments)
+            SELECT course_id, ${pref.requestID}, ${pref.student_id}, "${pref.availability}", ${pref.group_size}, ${pref.section},"${pref.comments}"
+            FROM groupee.course AS C
+            WHERE C.course_name="${pref.courseName}"`
+    )
     .then(() => {
         return res.json({
             status:200,
@@ -126,6 +132,7 @@ export async function createGroupRequest(req: Request, res: Response) {
         });
     })
     .catch((err) => {
+        console.log(err)
         return res.json({
             status:400,
             message: `Failed to post new preference (#${pref.requestID}) for ${pref.courseName}.`

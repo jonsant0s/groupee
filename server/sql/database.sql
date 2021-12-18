@@ -43,13 +43,23 @@ CREATE TABLE IF NOT EXISTS `groupee`. `course` (
     FOREIGN KEY (`instructor_id`) REFERENCES `groupee`.`professor`(`professor_id`)
 );
 
+CREATE TABLE IF NOT EXISTS `groupee`.`group` (
+    `group_no` INT(3) NOT NULL AUTO_INCREMENT,
+    `group_name` VARCHAR(54),
+    `grade` VARCHAR(2),
+
+    PRIMARY KEY (`group_no`)
+);
+
 CREATE TABLE IF NOT EXISTS `groupee`. `classlist` (
     `course_id` INT(4) NOT NULL,
     `student_id` INT(6) NOT NULL,
     `section_no` INT(2) NOT NULL,
+    `group_no` INT(3) DEFAULT NULL,
 
     FOREIGN KEY (`course_id`) REFERENCES `groupee`.`course`(`course_id`),
-    FOREIGN KEY (`student_id`) REFERENCES `groupee`.`student`(`student_id`)
+    FOREIGN KEY (`student_id`) REFERENCES `groupee`.`student`(`student_id`),
+    FOREIGN KEY (`group_no`) REFERENCES `groupee`.`group` (`group_no`)
 );
 
 CREATE TABLE IF NOT EXISTS `groupee`. `group_request` (
@@ -59,20 +69,12 @@ CREATE TABLE IF NOT EXISTS `groupee`. `group_request` (
     `size` INT NOT NULL,
     `course_id` INT(6) NOT NULL,
     `section` INT(2) NOT NULL,
+    `status` VARCHAR(20) DEFAULT 'looking for members',
     `comments` VARCHAR(255),
     
     PRIMARY KEY (`request_id`),
     FOREIGN KEY (`course_id`) REFERENCES `groupee`.`course`(`course_id`),
     FOREIGN KEY (`poster_id`) REFERENCES `groupee`.`student`(`student_id`)
-);
-
-CREATE TABLE IF NOT EXISTS `groupee`.`group` (
-    `group_no` INT(3) NOT NULL AUTO_INCREMENT,
-    `group_name` VARCHAR(54) NOT NULL,
-    `project_topic` VARCHAR(54),
-    `grade` VARCHAR(2),
-
-    PRIMARY KEY (`group_no`)
 );
 
 CREATE TABLE IF NOT EXISTS `groupee`. `comment` (
@@ -88,10 +90,19 @@ CREATE TABLE IF NOT EXISTS `groupee`. `comment` (
 CREATE TABLE IF NOT EXISTS `groupee`.`join_request` (
     `post_id` INT(6),
     `student_id` INT(6),
-    `join_group` TINYINT(1) DEFAULT 0,
-    `conflict` TINYINT(1) DEFAULT 0,
     `status` VARCHAR(20) DEFAULT 'pending',
     
-    FOREIGN KEY (`post_id`) REFERENCES `groupee`. `group_request`(`request_id`),
+    FOREIGN KEY (`post_id`) REFERENCES `groupee`. `group_request`(`request_id`) ON DELETE SET NULL,
     FOREIGN KEY (`student_id`) REFERENCES `groupee`.`student`(`student_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `groupee`.`proposal` (
+    `submission_id` INT(6),
+    `group_no` INT(6),
+    `submission_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `topic` VARCHAR(54),
+    `description` VARCHAR(255),
+    `status` VARCHAR(20) DEFAULT 'submitted',
+    
+    FOREIGN KEY (`group_no`) REFERENCES `groupee`. `group`(`group_no`)
 );
