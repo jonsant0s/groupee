@@ -2,16 +2,16 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3001/";
 
-export const fetchUserClasses = (route: string, id: string) => {
+export const fetchUserGroups = (id: number) => {
     return axios
-        .get(`${API_URL}classlist/${route}`, {
+        .get(`${API_URL}groups/getGroups`, {
             params: {
-                school_id: id,
+                student_id: id,
             },
         })
         .then((response) => {
             console.log(response.data);
-            localStorage.setItem("userClasses", JSON.stringify(response.data));
+            localStorage.setItem("userGroups", JSON.stringify(response.data));
             return response.data;
         })
         .catch((err) => {
