@@ -23,6 +23,11 @@ interface UserInfo {
     role: string
 }
 
+interface GroupInfo {
+    group_no: number,
+    courseName: string,
+}
+
 interface RequestInput {
     requestID: number,
     courseName: string,
@@ -31,6 +36,15 @@ interface RequestInput {
     group_size: number,
     section: number,
     comments?:string
+}
+
+interface ProposalInput {
+    proposalID: number,
+    group_no: number,
+    submission_date: any,
+    topic: string;
+    description: string
+    status: string
 }
 
 interface ForumPosts extends RequestInput {
