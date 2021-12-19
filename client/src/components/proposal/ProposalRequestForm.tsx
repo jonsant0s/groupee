@@ -19,7 +19,7 @@ export const ProposalRequestForm: React.FC<FormInfo> = ({ userClasses }) => {
 
     const initProposal: ProposalInput = {
         proposalID: randomIntFromInterval(),
-        group_no: groupNo[0],
+        group_no: undefined,
         submission_date: Date.now(),
         topic: "",
         description: "",
@@ -36,31 +36,33 @@ export const ProposalRequestForm: React.FC<FormInfo> = ({ userClasses }) => {
 
     const handleInputChange = (e: ChangeEvent) => {
         e.persist();
-        console.log(proposalInfo.group_no);
         let prev = { ...proposalInfo };
         prev[e.target.id] = e.target.value;
-
         setProposalInfo(prev);
         console.log(proposalInfo);
     };
 
     const onSubmit = () => {
         axios
-            .post("http://localhost:3001/proposals/create", proposalInfo)
+            .post("http://localhost:3001/proposal", {
+                submission_id: proposalInfo.proposalID,
+                group_no: proposalInfo.group_no,
+                topic: proposalInfo.topic,
+                description: proposalInfo.description,
+            })
             .then((res) => {
-                console.log(res.data);
-                // setAlert({
-                //     status: res.data.status,
-                //     message: res.data.message,
-                // });
+                setAlert({
+                    status: res.data.status,
+                    message: res.data.message,
+                });
                 setProposalInfo(initProposal);
             })
             .catch((err) => {
                 console.log(err.data);
-                // setAlert({
-                //     status: err.data.status,
-                //     message: err.data.message,
-                // });
+                setAlert({
+                    status: err.data.status,
+                    message: err.data.message,
+                });
             });
     };
 
@@ -87,16 +89,13 @@ export const ProposalRequestForm: React.FC<FormInfo> = ({ userClasses }) => {
                         )}
 
                         <label className="form-label mt-3">Group Number</label>
-                        <select
+                        <input
+                            className="form-control"
                             id="group_no"
-                            className="form-select"
+                            name="group_no"
                             value={proposalInfo.group_no}
                             onChange={handleInputChange}
-                        >
-                            {groupNo.map((no) => {
-                                return <option key={no}>{no}</option>;
-                            })}
-                        </select>
+                        />
                         <label className="form-label mt-3">Topic</label>
                         <input
                             className="form-control"

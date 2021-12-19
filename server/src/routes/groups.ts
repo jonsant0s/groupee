@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createGroup, getMemberRequestInfo, reviewGroupRequests, updateStudentGroup,getGroups } from "../controllers/groups";
+import { createGroup, getMemberRequestInfo, reviewGroupRequests, updateStudentGroup,getGroups, getGroupMembers } from "../controllers/groups";
 
 const router = Router();
 
@@ -8,5 +8,6 @@ router.route("/").get(reviewGroupRequests);
 router.route("/members").get(getMemberRequestInfo);
 router.route("/members").put(updateStudentGroup);
 router.route("/section").get(getGroups);
+router.route("/section/members").get(getGroupMembers);
 
 export default router;

@@ -3,13 +3,13 @@ import { database } from "../database";
 
 export async function updateProposal(req: Request | any, res: Response) {
     const db = await database();
-    const { status, group_no, time_stamp } = req.body;
+    const { status, group_no } = req.body;
 
     db.query(
         `
         UPDATE groupee.proposal
         SET status="${status}"
-        WHERE group_no=${group_no} AND submission_date="${time_stamp}"`
+        WHERE group_no=${group_no} AND status="submitted"`
     )
         .then(() => {
             return res.json({
@@ -17,25 +17,28 @@ export async function updateProposal(req: Request | any, res: Response) {
                 message: `Updated proposal. You have ${status} the submission`,
             });
         })
-        .catch((err) => {
-            console.log(err);
+        .catch(() => {
             return res.json({
                 status: 400,
                 message: `Failed to update submission.`,
             });
         });
 }
-// Student tries to join a group
-export async function getProposals(req: Request | any, res: Response) {
-    const db = await database();
-    const { course_id } = req.query;
 
+export async function getGroupProposal(req: Request | any, res: Response) {
+    const db = await database();
+    const { student_id, course_id } = req.query;
+    
     db.query(
         `SELECT DISTINCT P.*
-        FROM groupee.proposal AS P
+        FROM (
+            SELECT * 
+            FROM groupee.proposal
+            WHERE ${student_id ? `1=1`:`status="submitted"`}) AS P
         JOIN ( SELECT group_no
                 FROM groupee.classlist 
-                WHERE course_id=${course_id}) AS G
+                WHERE course_id=${course_id} AND 
+                ${student_id ? `student_id=${student_id}`:`1=1`}) AS G
         ON G.group_no=P.group_no`
     )
         .then((data) => {

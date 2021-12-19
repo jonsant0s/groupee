@@ -1,6 +1,25 @@
+import { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
+import * as Api from "./ProposalHelpers";
 
-export const ProfessorProposalPage = () => {
+interface ProposalProps {
+    proposals: any;
+}
+
+export const ProfessorProposalPage: React.FC<ProposalProps> = ({
+    proposals,
+}) => {
+    const [reload, setReload] = useState(false);
+
+    useEffect(() => {
+        console.log(proposals);
+    }, [reload]);
+
+    const handleDecision = (status: string, group_no: number) => {
+        Api.updateGroupProposal(status, group_no).then((res) => {
+            setReload(!reload);
+        });
+    };
     return (
         <div className="col-md-12 border p-5">
             <h5>Submitted Proposals</h5>
@@ -15,27 +34,47 @@ export const ProfessorProposalPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td> 7 </td>
-                        <td> My title </td>
-                        <td className="w-25">
-                            {" "}
-                            Would like to build a game for this class{" "}
-                        </td>
-                        <td> Time stamp </td>
-                        <td>
-                            <span>
-                                <Button className="btn-success mr-2" size="sm">
-                                    Approve
-                                </Button>
-                            </span>
-                            <span>
-                                <Button className="btn-danger" size="sm">
-                                    Reject
-                                </Button>
-                            </span>
-                        </td>
-                    </tr>
+                    {proposals &&
+                        proposals.map((proposal) => {
+                            return (
+                                <tr>
+                                    <td>{proposal.group_no}</td>
+                                    <td>{proposal.topic}</td>
+                                    <td>{proposal.description}</td>
+                                    <td>{proposal.submission_date}</td>
+                                    <td>
+                                        <span>
+                                            <Button
+                                                className="btn-success mr-2"
+                                                size="sm"
+                                                onClick={() => {
+                                                    handleDecision(
+                                                        "Approved",
+                                                        proposal.group_no
+                                                    );
+                                                }}
+                                            >
+                                                Approve
+                                            </Button>
+                                        </span>
+                                        <span>
+                                            <Button
+                                                className="btn-danger"
+                                                size="sm"
+                                                onClick={() => {
+                                                    handleDecision(
+                                                        "Declined",
+                                                        proposal.group_no
+                                                    );
+                                                }}
+                                            >
+                                                Decline
+                                            </Button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            );
+                        })}
                 </tbody>
             </Table>
         </div>

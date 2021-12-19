@@ -40,7 +40,7 @@ interface RequestInput {
 
 interface ProposalInput {
     proposalID: number,
-    group_no: number,
+    group_no?: number,
     submission_date: any,
     topic: string;
     description: string
