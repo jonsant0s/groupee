@@ -1,6 +1,37 @@
 import { Request, Response } from "express";
 import { database } from "../database";
 
+export async function getGroupMembers(req: Request, res: Response) {
+    const db = await database();
+    const { student_id, course_name } = req.query;
+
+    db.query (`
+        SELECT DISTINCT *
+        FROM (
+            SELECT course_id 
+            FROM groupee.course 
+            WHERE course_name="${course_name}") AS Y
+        INNER JOIN (
+            SELECT *
+            FROM groupee.classlist
+            WHERE student_id=${student_id}) AS L
+        ON L.course_id=Y.course_id
+        INNER JOIN groupee.classlist AS C
+            ON L.group_no=C.group_no
+        INNER JOIN groupee.student AS X
+            ON X.student_id=C.student_id`
+    )
+    .then((result) => {
+        return res.json(result[0]);
+    })
+    .catch((err) => {
+        return res.json({
+            status:400,
+            message: err
+        });
+    })
+}
+
 export async function getGroups(req: Request, res: Response) {
     const db = await database();
     const { course_id, group_no } = req.query;
@@ -79,12 +110,15 @@ export async function getMemberRequestInfo(req: Request, res: Response) {
 
 export async function updateStudentGroup(req: Request, res: Response) {
     const db = await database();
-    const { course_id, student_id } = req.body;
+    const { post_id } = req.body;
 
     db.query (`
         UPDATE groupee.classlist AS C
         SET group_no=(SELECT max(group_no) FROM groupee.group)
-        WHERE C.course_id=${course_id} AND C.student_id=${student_id}`
+        WHERE C.student_id IN (
+            SELECT student_id
+            FROM groupee.join_request
+            WHERE status="Accepted" AND post_id=${post_id})`
     )
     .then(()=>{
         return res.json({

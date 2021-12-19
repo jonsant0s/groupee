@@ -92,11 +92,19 @@ export const ProfessorGroupDetailsScreen: React.FC<ProfessorProps> = ({
                                         </td>
                                         <td> #0{pref.section} </td>
                                         <td> #{pref.request_id} </td>
-                                        <td
-                                            onClick={() => {
-                                                getMembers(pref.request_id);
-                                            }}
-                                        >
+                                        <td>
+                                                <Button
+                                                    className="btn-success mr-2"
+                                                    size="sm"
+                                                    onClick={() => {
+                                                        getMembers(pref.request_id);
+                                                    }}
+                                                >
+                                                    {" "}
+                                                    Approve{" "}
+
+                                                    </Button>
+                                            
                                             {" "}
                                             {pref.size}/4
                                         </td>

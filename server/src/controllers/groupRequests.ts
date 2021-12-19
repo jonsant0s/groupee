@@ -5,7 +5,6 @@ import { NewRequest } from "../types";
 export async function updateGroupRequest(req: Request, res: Response) {
     const db = await database();
     const { post_id, status } = req.body;
-    console.log(status);
 
     db.query(`
         UPDATE groupee.group_request
@@ -58,7 +57,8 @@ export async function deleteGroupPreference(req: Request, res: Response) {
             message: `Deleted preference post #${request_id}.`
         });
     })
-    .catch(() => {
+    .catch((err) => {
+        console.log(err);
         return res.json({
             status:400,
             message: `Failed delete preference #${request_id}.`
