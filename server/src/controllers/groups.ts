@@ -97,6 +97,7 @@ export async function getGroupMembers(req: Request, res: Response) {
         return res.json(result[0]);
     })
     .catch((err) => {
+        console.log(err)
         return res.json({
             status:400,
             message: err

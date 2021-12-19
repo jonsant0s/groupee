@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { submitProposal, getProposals, updateProposal } from "../controllers/proposal";
+import { submitProposal, getGroupProposal, updateProposal } from "../controllers/proposal";
 
 const router = Router();
 
 router.route("/").post(submitProposal);
-router.route("/submissions").get(getProposals);
-router.route("/review").get(updateProposal);
+router.route("/submissions").get(getGroupProposal);
+router.route("/review").put(updateProposal);
 export default router;
