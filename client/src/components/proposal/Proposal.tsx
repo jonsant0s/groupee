@@ -9,10 +9,10 @@ import {
 import { ProfessorProposalPage } from "./ProfessorProposalPage";
 import { ProposalRequestForm } from "./ProposalRequestForm";
 
-import * as Api from "./ProposalHelpers"
+import * as Api from "./ProposalHelpers";
 
 interface ProposalProps {
-    class_id: number,
+    class_id: number;
 }
 export const Proposal = () => {
     const [user, setUser] = useState(getCurrentUser);
@@ -29,22 +29,22 @@ export const Proposal = () => {
         const courseId = currentUserClass;
 
         Api.fetchUserGroups(user.school_id, currentUserClass)
-        .then((groups) => {
-            setUserGroups(groups);
-        })
-        .then(() => {
-            return Api.fetchProposal(courseId, school_id);
-        })
-        .then((proposals) => {
-            setUserProposals(proposals);
-        })
-        .then(() => {
-            return Api.fetchGroupMembers(user.school_id, courseId);
-        })
-        .then((members) => {
-            setGroupMembers(members);
-        });
-    },[currentUserClass]);
+            .then((groups) => {
+                setUserGroups(groups);
+            })
+            .then(() => {
+                return Api.fetchProposal(courseId, school_id);
+            })
+            .then((proposals) => {
+                setUserProposals(proposals);
+            })
+            .then(() => {
+                return Api.fetchGroupMembers(user.school_id, courseId);
+            })
+            .then((members) => {
+                setGroupMembers(members);
+            });
+    }, [currentUserClass]);
 
     const handleInputChange = (e: ChangeEvent) => {
         e.persist();
@@ -56,10 +56,12 @@ export const Proposal = () => {
     const mapGroupMembers = () => {
         return groupMembers.map((member) => {
             return (
-                <h6>{member.first_name} {member.last_name} ({member.student_id})</h6>
-            )
-        })
-    }
+                <h6>
+                    {member.first_name} {member.last_name} ({member.student_id})
+                </h6>
+            );
+        });
+    };
     return (
         <div className="container-sm vh-100 p-2">
             <label className="form-label mt-3">Course</label>
@@ -69,7 +71,7 @@ export const Proposal = () => {
                 value={currentUserClass}
                 onChange={handleInputChange}
             >
-                { userClasses.map((course) => {
+                {userClasses.map((course) => {
                     return (
                         <option>
                             {course.course_name}, {course.course_id}
@@ -78,8 +80,8 @@ export const Proposal = () => {
                 })}
             </select>
 
-            { user.role == "Professor" ? (
-                <ProfessorProposalPage proposals={userProposals}/>
+            {user.role == "Professor" ? (
+                <ProfessorProposalPage proposals={userProposals} />
             ) : (
                 <div className="col-md-12 mt-5">
                     <h5>My Group Information</h5>
@@ -92,7 +94,8 @@ export const Proposal = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            { userGroups && groupMembers && (
+                            {userGroups &&
+                                groupMembers &&
                                 userGroups.map((group) => {
                                     return (
                                         <tr>
@@ -101,8 +104,7 @@ export const Proposal = () => {
                                             <td> {mapGroupMembers()} </td>
                                         </tr>
                                     );
-                                })
-                            )}
+                                })}
                         </tbody>
                     </Table>
                     <div className="mt-5">
@@ -118,27 +120,22 @@ export const Proposal = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                { userProposals && (
+                                {userProposals &&
                                     userProposals.map((proposal) => {
                                         return (
                                             <tr>
                                                 <td>
                                                     {proposal.submission_id}
                                                 </td>
-                                                <td>
-                                                    {proposal.group_no}
-                                                </td>
+                                                <td>{proposal.group_no}</td>
                                                 <td> {proposal.topic}</td>
-                                                <td>
-                                                    {proposal.description}
-                                                </td>
+                                                <td>{proposal.description}</td>
                                                 <td>
                                                     {proposal.submission_date}
                                                 </td>
                                             </tr>
                                         );
-                                    })
-                                )}
+                                    })}
                             </tbody>
                         </Table>
                     </div>
