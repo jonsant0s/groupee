@@ -50,9 +50,10 @@ export const ProfessorGroupDetailsScreen: React.FC<ProfessorProps> = ({
             })
             .then((res) => {
                 if (status == "Approved") {
-                    console.log(postPref.course_id);
-                    console.log(user.school_id);
-                    return Api.SetGroupId(user.school_id, postPref.course_id);
+                    return Api.SetGroupId(
+                        postPref.course_id,
+                        postPref.poster_id
+                    );
                 }
             })
             .then((res) => {

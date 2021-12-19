@@ -5,6 +5,7 @@ import { fetchUserClasses } from "./HomeScreenHelpers";
 
 import Button from "react-bootstrap/esm/Button";
 import "./HomeScreen.css";
+import { fetchUserGroups } from "components/proposal/ProposalHelpers";
 
 export const HomeScreen = () => {
     const [user, setUser] = useState(getCurrentUser);

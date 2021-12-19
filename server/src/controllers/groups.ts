@@ -3,12 +3,12 @@ import { database } from "../database";
 
 export async function getGroups(req: Request, res: Response) {
     const db = await database();
-    const { course_id, group_no } = req.query;
+    const { student_id, course_id } = req.query;
     
     db.query (`
         SELECT DISTINCT *
-        FROM groupee.classlist
-        WHERE course_id=${course_id} AND ${group_no? `group_no=${group_no}`: `group_no IS NULL`}`
+        FROM groupee.group as G, groupee.classlist as L
+        WHERE G.group_no=L.group_no AND L.student_id=${student_id} AND L.course_id=${course_id}`
     )
     .then((result) => {
         return res.json(result[0])
@@ -65,6 +65,33 @@ export async function getMemberRequestInfo(req: Request, res: Response) {
             WHERE status="Accepted" AND
                   post_id=${post_id}) AS R
             ON S.student_id=R.student_id`
+    )
+    .then((result) => {
+        return res.json(result[0]);
+    })
+    .catch((err) => {
+        return res.json({
+            status:400,
+            message: err
+        });
+    })
+}
+
+export async function getGroupMembers(req: Request, res: Response) {
+    const db = await database();
+    const { student_id, course_id } = req.query;
+
+    db.query (`
+        SELECT DISTINCT *
+        FROM (
+            SELECT *
+            FROM groupee.classlist
+            WHERE student_id=${student_id}
+                  AND course_id=${course_id}) AS L
+        INNER JOIN groupee.classlist AS C
+            ON L.group_no=C.group_no
+        INNER JOIN groupee.student AS X
+            ON X.student_id=C.student_id`
     )
     .then((result) => {
         return res.json(result[0]);

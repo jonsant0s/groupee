@@ -104,7 +104,7 @@ export const RequestForm: React.FC<FormInfo> = ({
                             value={requestInfo.courseName}
                             onChange={handleInputChange}
                         >
-                            {userClasses.map((course, i) => {
+                            {userClasses.map((course) => {
                                 return (
                                     <option key={`c${course.course_name}`}>
                                         {course.course_name}

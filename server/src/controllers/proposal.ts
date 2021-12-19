@@ -25,7 +25,7 @@ export async function updateProposal(req: Request | any, res: Response) {
             });
         });
 }
-// Student tries to join a group
+
 export async function getProposals(req: Request | any, res: Response) {
     const db = await database();
     const { course_id } = req.query;
