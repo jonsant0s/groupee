@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `groupee`. `comment` (
     `content` VARCHAR(255) DEFAULT NULL,
     `time_stamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (`post_id`) REFERENCES `groupee`. `group_request`(`request_id`),
+    FOREIGN KEY (`post_id`) REFERENCES `groupee`. `group_request`(`request_id`) ON DELETE SET NULL,
     FOREIGN KEY (`commenter_id`) REFERENCES `groupee`.`student`(`student_id`)
 );
 
