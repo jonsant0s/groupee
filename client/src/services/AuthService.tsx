@@ -58,14 +58,14 @@ export const getUserGroups = () => {
 };
 
 export const getUserProposals = () => {
-    const userProposalsStr = localStorage.getItem("userProposals ");
+    const userProposalsStr = localStorage.getItem("userProposals");
     if (userProposalsStr) return JSON.parse(userProposalsStr);
 
     return;
 };
 
 export const getUserGroupMembers = () => {
-    const userGroupMemberStr = localStorage.getItem("userGroupMembers ");
+    const userGroupMemberStr = localStorage.getItem("userGroupMembers");
     if (userGroupMemberStr) return JSON.parse(userGroupMemberStr);
 
     return;

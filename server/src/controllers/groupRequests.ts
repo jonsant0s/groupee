@@ -46,7 +46,7 @@ export async function getGroupPreferencePost(req: Request, res: Response) {
 // Delete posting from forum
 export async function deleteGroupPreference(req: Request, res: Response) {
     const db = await database();
-    const { request_id } = req.body;
+    const { request_id } = req.query;
 
     db.query (
         `DELETE FROM groupee.group_request
@@ -58,7 +58,8 @@ export async function deleteGroupPreference(req: Request, res: Response) {
             message: `Deleted preference post #${request_id}.`
         });
     })
-    .catch(() => {
+    .catch((err) => {
+        console.log(err);
         return res.json({
             status:400,
             message: `Failed delete preference #${request_id}.`
